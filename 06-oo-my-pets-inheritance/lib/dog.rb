@@ -1,4 +1,4 @@
 require_relative './pet'
-class Dog
+class Dog < Pet
   # code goes here
 end
