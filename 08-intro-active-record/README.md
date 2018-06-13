@@ -1,0 +1,124 @@
+### Rake and File Structure
+
+* Rake
+  * We have a Rakefile that defines tasks to be run from the command line
+  * To view tasks, run `rake -T` from your terminal
+  * Tasks allow us to encapsulate ruby code that we want to execute **from the command line**
+  * We're getting some tasks from the `sinatra/activerecord/rake` library which gives us easy to use ActiveRecord tasks (we can see this included in our gemfile)
+  ---
+* File structure
+  * Gemfile––what is a gemfile? Why on earth would we want to use one?
+  * `app` folder holds our models––our Ruby classes
+  * `db` directory holds migrations and seeds.rb file––what are our seeds?
+  * `config` holds environment file
+    * `require 'bundler'` and `Bundler.require` **load all of the gems in our Gemfile**
+    * `ActiveRecord::Base.establish_connection` **sets up our database** (with options hash)
+    * `require_all` **loads all of our application code**
+
+---
+
+### Migrations and Database Structure
+
+* we want to create our first model \(ruby class + sql table\)––how to we bridge the gap between sql data and our ruby classes?
+* What is a model?
+* What is a migration?
+* What is a schema?
+* to get our database set up, we need to use the `rake db:create_migration` task––will this work?
+  * create the migrations you know you'll need up-front
+* check out the migrations in the `db/migrations` folder
+
+  * what is the sequence of numbers in the beginning of the file name?
+  * how and why does activerecord use this?
+  * What are the `change`, `up`, and `down` methods in migrations?
+
+* `create_table` method which takes a block, the block takes a table builder
+
+  * why do we use the `t` variable?
+  * `t.string :name` what is the `string` method declaring?
+  * what is the argument to the `string` method and the data type? `:name`
+  * how do we add foreign keys to a related table? which table does it go on?
+
+  ---
+
+* run migrations `rake db:migrate`
+* how does activerecord keep track of migrations that have been run?
+
+  * Our `schema.rb` which is the **authoritative representation of the database structure**
+  * look at the `version` argument in the schema to see if it matches with the last successful migration timestamp. **These should match if your migration succeeded**
+
+  ---
+
+* migration conventions
+  * **file name and class name must match up exactly, but in different case**––for example `TIMESTAMPE_create_authors.rb` our db table is pluralized `Authors` and our model (Ruby class) is singular `class Author; end`
+  * create_table block argument is usually a `t`
+* blowing up the database (DO NOT DO IN REAL LIFE)
+  * delete db
+  * delete schema.rb
+  * !!! don't do this, just in this module, and don't do it if you can't easily get your data back
+  * instead, use `rake db:rollback`
+  ---
+* gracefully fixing the db
+  * create a new migration
+  * roll that migration back
+  * delete the migration files you don't want to keep
+* we don't need to create migration files by hand anymore, thank goodness! 😍THX ACTIVERECORD😍
+
+### Connecting Models to ActiveRecord
+
+* Our models (Ruby classes) appear in `app/models`
+  * **MAJOR KEY 🔑** convention is to have the model class name singular and the sql table plural––`class Author; end` but the table is called `authors`
+* Since our Ruby classes inherit from ActiveRecord, we have access to AR methods
+
+  * We can use `Author.create(name: 'author name')` to both **save our author into the db** and **create a ruby object with that same data**
+  * How do we suddenly know which attributes our author is supposed to have?
+
+* A book belongs to an author, so we need to create it with an author_id: `Book.create(title: '1984', author_id: 1)`
+
+* How can we associate a book with an author and vice-versa?
+
+```ruby
+class Book < ActiveRecord::Base
+  def author
+    # Author.all.find{ |author_instance| author_instance.id == self.author_id }
+    # user AR .find
+    Author.find(self.author_id)
+  end
+end
+#...
+class Author < ActiveRecord::Base
+  def books
+    # Book.all.select{|book| book.author_id == self.id}
+    # use AR .where
+    Book.where(author_id: self.id)
+  end
+end
+```
+
+## What About a Better Way™️
+
+* ActiveRecord Macros
+  * Book class: `belongs_to :author`
+  * Author class `has_many :books`
+* These macros provide **even more** methods, like `book_instance.author` and `author_instance.books`
+  * **Major Key🔑**––since a book belongs_to an author it should have ONE author. Therefore the method is `.author`. An author HAS MANY books, therefore the method is `.books` pay attention to what is singular and what is plural.
+
+### Important Methods from ActiveRecord
+
+* Model.new
+  * creates a new **RUBY** instance in local memory without persisting to the database
+* Model\#save
+  * inserts or updates a **RUBY** instance to the db
+* Model.create
+  * Model.new + Model\#save
+  * A class method that creates a new **RUBY** instance AND saves it to the database
+* Model.all
+  * returns all instances (we wrote this by hand a million times)
+* Model.first
+  * instance with the lowest ID in the db
+* Model.find
+  * Finds a record by id and returns a Ruby instance––`Book.find(1)` returns the book with an id of 1
+* Model.find_by\({ attribute: value }\)
+  * can find by one attribute-value pair or multiple
+  * `Book.find(title: '1984')` will return the book with a title of '1984'
+
+[Active Record Docs](http://edgeguides.rubyonrails.org/active_record_migrations.html#using-the-up-down-methods)

@@ -1,0 +1,20 @@
+require_relative './config/environment'
+require 'sinatra/activerecord/rake'
+
+desc 'Start our app console'
+task :console do
+  ActiveRecord::Base.logger = Logger.new(STDOUT)
+  Pry.start
+end
+
+# desc 'HOTDOG TECHNOLOGIES, LLC'
+# task :hotdog do
+#   puts 'HOTDOG TECHNIQUE TIME WOW COOL NICE'
+# end
+#
+# namespace :food do
+#   desc 'nested pizza task'
+#   task :pizza do
+#     puts "I don't care what anyone has to say, pizza hut stuffed crust is A M A Z I NG"
+#   end
+# end
