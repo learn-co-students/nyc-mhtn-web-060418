@@ -49,7 +49,7 @@
   ---
 
 * migration conventions
-  * **file name and class name must match up exactly, but in different case**––for example `TIMESTAMPE_create_authors.rb` our db table is pluralized `Authors` and our model (Ruby class) is singular `class Author; end`
+  * **file name and class name must match up exactly, but in different case**––for example `TIMESTAMPE_create_trainers.rb` our db table is pluralized `Trainers` and our model (Ruby class) is singular `class Trainer; end`
   * create_table block argument is usually a `t`
 * blowing up the database (DO NOT DO IN REAL LIFE)
   * delete db
@@ -66,30 +66,30 @@
 ### Connecting Models to ActiveRecord
 
 * Our models (Ruby classes) appear in `app/models`
-  * **MAJOR KEY 🔑** convention is to have the model class name singular and the sql table plural––`class Author; end` but the table is called `authors`
+  * **MAJOR KEY 🔑** convention is to have the model class name singular and the sql table plural––`class Trainer; end` but the table is called `trainers`
 * Since our Ruby classes inherit from ActiveRecord, we have access to AR methods
 
-  * We can use `Author.create(name: 'author name')` to both **save our author into the db** and **create a ruby object with that same data**
-  * How do we suddenly know which attributes our author is supposed to have?
+  * We can use `Trainer.create(name: 'John Kavanagh')` to both **save our trainer to the db** and **create a ruby object with that same data**
+  * How do we suddenly know which attributes our trainer is supposed to have?
 
-* A book belongs to an author, so we need to create it with an author_id: `Book.create(title: '1984', author_id: 1)`
+* A fighter belongs to a trainer, so we need to create it with an trainer_id: `Fighter.create(name: 'Cris Cyborg', trainer_id: 1)`
 
 * How can we associate a book with an author and vice-versa?
 
 ```ruby
-class Book < ActiveRecord::Base
-  def author
-    # Author.all.find{ |author_instance| author_instance.id == self.author_id }
+class Fighter < ActiveRecord::Base
+  def trainer
+    # Trainer.all.find{ |trainer| trainer.id == self.trainer_id }
     # user AR .find
-    Author.find(self.author_id)
+    Trainer.find(self.trainer_id)
   end
 end
 #...
-class Author < ActiveRecord::Base
-  def books
-    # Book.all.select{|book| book.author_id == self.id}
+class Trainer < ActiveRecord::Base
+  def fighters
+    # Fighter.all.select{|fighter| fighter.trainer_id == self.id}
     # use AR .where
-    Book.where(author_id: self.id)
+    Trainer.where(trainer_id: self.id)
   end
 end
 ```
@@ -97,10 +97,10 @@ end
 ## What About a Better Way™️
 
 * ActiveRecord Macros
-  * Book class: `belongs_to :author`
-  * Author class `has_many :books`
-* These macros provide **even more** methods, like `book_instance.author` and `author_instance.books`
-  * **Major Key🔑**––since a book belongs_to an author it should have ONE author. Therefore the method is `.author`. An author HAS MANY books, therefore the method is `.books` pay attention to what is singular and what is plural.
+  * Fighter model: `belongs_to :trainer`
+  * Trainer model `has_many :fighters`
+* These macros provide **even more** methods, like `fighter_instance.author` and `trainer_instance.books`
+  * **Major Key🔑**––since a fighter belongs_to a trainer it should have ONE trainer. Therefore the method is `.trainer`. A trainer HAS MANY fighters, therefore the method is `.fighters` pay attention to what is singular and what is plural.
 
 ### Important Methods from ActiveRecord
 
