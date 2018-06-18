@@ -6,3 +6,12 @@ task :console do
   ActiveRecord::Base.logger = Logger.new(STDOUT)
   Pry.start
 end
+
+# we can namespace our rake tasks
+# db tasks are namespaced under db
+namespace :food do
+  desc 'nested pizza task'
+  task :pizza do
+    puts "I don't care what anyone has to say, pizza hut stuffed crust is A M A Z I NG"
+  end
+end

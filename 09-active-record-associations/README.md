@@ -3,12 +3,16 @@
 #### Migrations
 
 - creating migrations from the command line
-  <!-- * `rake db:create_migration NAME=create_users` -->
+  - `rake db:create_migration NAME=create_users`
 - migration syntax
 
   ```ruby
   def change
-
+    create_table :doctors do |t|
+      t.string :name
+      t.integer :department_id
+      # t.references :department
+    end
   end
   ```
 
@@ -32,7 +36,7 @@
 
 ### Wrap Up
 
-- difference between `Model.new` `Model#save` and `Model.create`
+- difference between `Model.new` `Model#save` and `Model.create`––model.create will return a new ruby instance and save it to the db
 - difference between changing attributes `Model#save` `Model#update`
 - if something `belongs_to` another model, it **needs** the foreign key of the model it belongs to on its table––if a `Tweet` `belongs_to` a `User`, it needs the `user_id` on its table
 - if we do the `belongs_to`, we need to include the inverse `has_many`––`User` `has_many :tweets`
@@ -40,3 +44,18 @@
   - ActiveRecord will automatically create instances of our join model when using the `<<` operator
 - 1000 times easier than writing raw sql
 - As always, 😍**THX ActiveRecord**😍
+
+```ruby
+house = Doctor.create(name: 'house')
+tashawn = Patient.create(name: 'tashawn', condition: 'itchy')
+
+# we can explicitly create a new instance of our join:
+Appointment.create(patient: tashawn, doctor: house, time: DateTime.new(2018, 6, 18))
+
+# OR we can use the shovel operator to create the join for us
+
+house.patients << tashawn
+# ar will know to create an instance of our join––appointment.
+# This will NOT work if my join needs more information than the foreign keys.
+# Using the shovel operator will set time to nil on our new appointment
+```
