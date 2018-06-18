@@ -25,6 +25,10 @@
 - We need to setup this association on **both models**; this cannot be one-sided.
 - How can we create a `has_many :through` association?
 
+### Seeds.rb
+
+- The `seeds.rb` file allows us to create some sample data that will be added to the db when calling `rake db:seed` from the command line
+
 ### Wrap Up
 
 - difference between `Model.new` `Model#save` and `Model.create`
