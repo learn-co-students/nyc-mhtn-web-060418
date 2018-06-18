@@ -17,6 +17,7 @@
 #### Models
 
 - Test our models in the console––can I create a new ruby instance? Can I save that into my database? Does it have the correct attributes? Check these before moving forward
+- Test each model ONE AT A TIME. Write a small amount of code, test it, then continue.
 
 ### Our First ActiveRecord Relationships
 
