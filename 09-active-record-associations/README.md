@@ -27,10 +27,10 @@
 
 ### Wrap Up
 
-- difference between new \(+ save\) and create
-- difference between changing attributes \(+ save\) and update
-- if something has a foreign_key it belongs to the table from the foreign key
-- if we do the `belongs_to`, we need to include the inverse `has_many`
+- difference between `Model.new` `Model#save` and `Model.create`
+- difference between changing attributes `Model#save` `Model#update`
+- if something `belongs_to` another model, it **needs** the foreign key of the model it belongs to on its table––if a `Tweet` `belongs_to` a `User`, it needs the `user_id` on its table
+- if we do the `belongs_to`, we need to include the inverse `has_many`––`User` `has_many :tweets`
 - we can use `has_many` `:through` when creating many to many associations
   - ActiveRecord will automatically create instances of our join model when using the `<<` operator
 - 1000 times easier than writing raw sql
