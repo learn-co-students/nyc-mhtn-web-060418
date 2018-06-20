@@ -94,6 +94,8 @@ Failed examples:
 rspec ./spec/is_palindrome_spec.rb:5 # is_palindrome? returns true for dad
 ```
 
+---
+
 ### Testing Strategy
 
 What are the cases we want to test? What if someone inputs an integer, not a string?
@@ -173,15 +175,44 @@ Here's a valid solution to the problem:
 def is_palindrome?(word)
   raise ArgumentError if !word.is_a?(String)
   return false if word.empty?
-
-  downcased_word = word.downcase.gsub(/[^0-9A-Za-z]/, '')
+# gsub will remove anything that is NOT (^ indicates not)
+  # digit 0-9
+  # lowercase letter a-z
+  # uppercase letter A-Z
+  # accented character À-ÿ
+# with an empty string
+  downcased_word = word.downcase.gsub(/[^0-9A-ZÀ-ÿa-z]/, '')
   downcased_word == downcased_word.reverse
 end
 ```
 
 ### Writing Testable Code
 
-- Code that does not rely on side effects is easy to test. The more tangled our code becomes, the harder it is to test. How many side effects do our methods have? The more they have, the harder they are to test
+- Code that is encapsulated well is easy to test
+
+  - Our methods have clear inputs/outputs:
+    - Methods with a lot of responsibilities are hard to test
+    - Methods that have one responsibility are easier to test
+  - We have sufficiently abstracted out dependencies:
+    - A `Driver` class does not need to know how a `Car` converts gasoline into fuel; it simply need to know about `Car#gas_pedal`, `Car#brake`, `Car#steering_wheel`
+    - The `Driver` can _interface_ with the `Car` without caring about or needing to know how the `Car` works under the hood
+    - We've seen this on a smaller scale by relying on our `Class.all` method to read/write to an `@@all` class variable. The class just needs the data but does not care about the literal variable name
+
+```ruby
+class Person
+  @@all_people = []
+  def initialize(props = {})
+    @name = name
+    self.class.all << self
+  end
+
+  def self.all
+    @@all_people
+  end
+end
+```
+
+<!-- - Code that does not rely on side effects is easy to test. The more tangled our code becomes, the harder it is to test. How many side effects do our methods have? The more they have, the harder they are to test. In other words, methods that mutate data or rely on global variables are hard to test. -->
 
 ### Workshop Exercise
 

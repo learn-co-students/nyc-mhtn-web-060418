@@ -1,3 +1,3 @@
 def is_palindrome?(word)
-  # implement here!
+  # your solution here
 end
