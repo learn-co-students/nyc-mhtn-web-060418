@@ -102,8 +102,6 @@ What are the cases we want to test? What if someone inputs an integer, not a str
 - the sad path; behavior that we expect to break
 - extreme edge cases; things like bad inputs or system errors
 
-- As a class, let's write out some more test cases
-
 ```ruby
 # spec/is_palindrome_spec.rb
 
