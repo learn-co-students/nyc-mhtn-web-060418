@@ -1,8 +1,8 @@
 # ruby-tdd
 
-Why is Unit testing important? Most of our large code projects are more like frankenstein's monster or the Power Rangers Megazord than anything else:
+Why is Unit testing important? Most of our large code projects are more like frankenstein's monster or Voltron than anything else:
 
-![](https://media.giphy.com/media/14lpUNhInOSz9S/giphy.gif)
+![](https://media.giphy.com/media/GyYj9rZUcHrPi/giphy.gif)
 
 They're a series of components that work together to make a larger, functioning program. But when the program doesn't work, it's difficult to identify which of the components have failed. Unit testing lets us look at each individual component piece-by-piece, to see which one's broken and why.
 
