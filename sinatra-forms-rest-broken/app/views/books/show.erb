@@ -1,0 +1,19 @@
+<h1><%= @book.title %></h1>
+<small><%= @book.author %></small>
+<p><%= @book.snippet %></p>
+<hr>
+
+<ul>
+  <h3>Navigation</h3>
+  <li>
+    <a href="/">Home</a></li>
+  <li>
+    <a href="/books">View All Books</a>
+  </li>
+  <li>
+    <a href="/books/new" style="color: red; font-weight: bold">Create a New Book</a>
+  </li>
+  <li>
+    <a href="/books/<%= @book.id %>/edit" style="color: red; font-weight: bold;">Edit book</a>
+  </li>
+</ul>
