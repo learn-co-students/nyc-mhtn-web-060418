@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Books</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+  <header>
+    <nav>
+      <ul>
+        <h3>Navigation</h3>
+        <li>
+          <a href="/">Home</a></li>
+        <li>
+          <a href="/books">View All Books</a>
+        </li>
+        <li>
+          <a href="/books/new" style="color: red; font-weight: bold">Create a New Book</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <hr />
+  <%= yield %>
+</body>
+</html>

@@ -1,0 +1,5 @@
+<form method="post" action= '/books/<%= @book.id %>'>
+  <input type="hidden" name="_method" value="patch" />
+  <%= erb :"books/_form" %>
+
+</form>
