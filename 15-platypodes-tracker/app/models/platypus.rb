@@ -1,0 +1,2 @@
+class Platypus < ApplicationRecord
+end
