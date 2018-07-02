@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  flavor: MyString
+  toasted: false
+  number_of_sprinkles: 1
+  ravioli_or_nah: false
+  rating: 1
+
+two:
+  flavor: MyString
+  toasted: false
+  number_of_sprinkles: 1
+  ravioli_or_nah: false
+  rating: 1

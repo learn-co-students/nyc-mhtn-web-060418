@@ -1,0 +1,6 @@
+<h1>HELLO FROM GEESE INDEX</h1>
+
+<% @geese.each do |goose| %>
+  <p><%= goose.name %></p>
+  <%= link_to('DELETE THIS GOOSE', goose_path(goose), {method: 'delete'})%>
+<% end %>
