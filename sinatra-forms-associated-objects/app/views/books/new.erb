@@ -1,0 +1,20 @@
+<section>
+  <form action="/books" method="POST">
+    <label>
+      Title
+    </label>
+      <input type="text" name="title" value="<%= @book.title %>">
+
+    <label>
+      Snippet
+    </label>
+      <input type="text" name="snippet" value="<%= @book.snippet %>">
+
+    <label>
+      Author
+    </label>
+      <input type="text" name="author_id" value="<%= @book.author_id %>">
+
+    <input type="submit">
+  </form>
+</section>

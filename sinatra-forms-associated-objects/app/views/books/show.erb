@@ -1,0 +1,19 @@
+<nav id="book">
+  <h3><%= @book.title %></h3>
+  <ul>
+    <li>
+      <a href="/books/<%= @book.id %>/edit">Edit book</a>
+    </li>
+    <li>
+      <form action="/books/<%= @book.id %>" method="POST">
+        <input type="hidden" name="_method" value="delete">
+        <input type="submit" value="Delete Book">
+      </form>
+    </li>
+  </ul>
+</nav>
+
+<section>
+  <small><a href="/authors/<%= @book.author.id %>"><%= @book.author.name %></a></small>
+  <p><%= @book.snippet %></p>
+</section>

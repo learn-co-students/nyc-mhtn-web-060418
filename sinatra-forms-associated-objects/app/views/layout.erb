@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <style media="screen">
+    body, header {
+      font-family: sans-serif;
+      padding: 0;
+      margin: 0;
+      background-color: #fafafa;
+    }
+
+    header > nav,
+    main > nav {
+      background: pink;
+      padding: 0.5rem;
+    }
+
+    main > nav h3,
+    main > nav ul,
+    main > nav ul li,
+    header > nav h1,
+    header > nav ul,
+    header > nav ul h2,
+    header > nav ul li {
+      display: inline-block;
+      font-weight: normal;
+      padding: 0;
+      margin: 0;
+    }
+
+    main > nav h3,
+    header > nav h1 {
+      font-size: 1.5rem;
+      margin-right: 2rem;
+    }
+
+    main > nav h3 {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+
+    header > nav h2,
+    header > nav a { font-size: 1rem; }
+
+    main > nav ul li,
+    header > nav ul { margin-right: 1rem; }
+
+    main > nav#author { background-color: #b4ff69; }
+    main > nav#book { background-color: #69b4ff; }
+    section,
+    main ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0.5rem;
+      width: 50rem;
+    }
+    main li { margin-bottom: 1rem; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <h1>BookLister</h1>
+        <ul>
+          <h2>Books</h2>
+          <li>
+            <a href="/books">View All</a>
+          </li>
+          <li>
+            <a href="/books/new">Create New</a>
+          </li>
+        </ul>
+        <ul>
+          <h2>Authors</h2>
+          <li>
+            <a href="/authors">View All</a>
+            <a href="/authors/new">Create New</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <%= yield %>
+    </main>
+  </body>
+</html>
