@@ -1,24 +1,15 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+During this lecture we discussed the basics of:
 
-Things you may want to cover:
+1. How to set up a new Rails app
+2. How to migrate and set up models & db using rails g
+3. How to manage routing in Rails
 
-* Ruby version
+We also went over a process for how to begin working on a new Rails app:
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+1. Rails new NAME
+2. Rails g model NAME ATTRIBUTES
+3. Rails g controller NAME ACTIONS
+4. Double check routing in routes.rb
+5. Double check proper naming convention in views
