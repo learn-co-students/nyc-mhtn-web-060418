@@ -1,20 +1,8 @@
-<h1>Create a Cow</h1>
-
-<% if flash[:notice] %>
-  <h1><%= flash[:notice] %></h1>
-  <ul>
-    <% @cow.errors.messages.map do |error_type, messages| %>
-    <li><%= error_type %>: <%= messages.join(" ") %></li>
-    <% end %>
-  </ul>
-<% end %>
-
-<%= form_for @cow do |f| %>
+<%= form_with model: @cow do |f| %>
   <%= f.label :name %>
   <%= f.text_field :name %>
   <br>
   <%= f.label :spots %>
-  <%# f.number_field :spots, value: rand(0..15) %>
   <%= f.number_field :spots %>
   <br>
   <!--
