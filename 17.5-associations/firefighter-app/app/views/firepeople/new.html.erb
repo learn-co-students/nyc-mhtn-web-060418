@@ -1,0 +1,9 @@
+<h1>Create Fire Person </h1>
+
+<%= form_for @fireperson do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <%= f.collection_select :name, Firetruck.all, :id, :name %> 
+  <%= f.submit %>
+
+<%end%>
