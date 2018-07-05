@@ -1,0 +1,5 @@
+<h2>Show Page for <%= @owner.name %>!</h2>
+
+<% @owner.pets.each do |pet| %>
+  <%= link_to pet.name, pet %>
+<% end %>

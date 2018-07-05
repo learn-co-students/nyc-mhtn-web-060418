@@ -1,0 +1,14 @@
+<h2>Edit Form for <%=@pet.name%></h2>
+
+<%= form_for @pet do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <br>
+  <br>
+  Species: <%= @pet.species %>
+  <br>
+  <br>
+  <%= f.label :owner_id, :Owner %>
+  <%=f.collection_select :owner_id, @owners, :id, :name %>
+  <%= f.submit %>
+<% end %>
