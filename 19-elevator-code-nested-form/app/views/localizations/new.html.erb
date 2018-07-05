@@ -1,0 +1,15 @@
+<h1>New localization for the elevator to <%= @elevator.name %></h1>
+<%= form_for [@elevator, @localization] do |form| %>
+
+  <%= form.label :language_id %>
+  <%= form.collection_select :language_id, @languages, :id, :name %>
+
+  <%= form.label :trigger_word %>
+  <%= form.text_field :trigger_word %>
+
+  <%= form.label :response %>
+  <%= form.text_field :response %>
+
+  <%= form.submit %>
+
+<% end %>
