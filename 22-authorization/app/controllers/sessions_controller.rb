@@ -1,7 +1,8 @@
 class SessionsController < ApplicationController
+  skip_before_action :authorized?, only: %i[new create]
 
   def new
-
+    # code
   end
 
   def create
@@ -15,12 +16,14 @@ class SessionsController < ApplicationController
     end
   end
 
+  def destroy
+    session.delete(:user_id)
+    redirect_to new_session_path
+  end
 
   private
+
   def user_params
     params.require(:session).permit(:username, :password)
   end
-
-
-
 end
