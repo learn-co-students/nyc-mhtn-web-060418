@@ -11,8 +11,12 @@
 
   <body>
     <header>
-      <%= link_to "Register", new_user_path %>
-      <%= link_to "Login", "/whatever" %>
+      <% if @logged_in_user %>
+        Logged in as: <%= @logged_in_user.username %>
+      <% else %>
+        <%= link_to "Register", new_user_path %>
+        <%= link_to "Login", "/whatever" %>
+      <% end %>
     </header>
     <%= yield %>
   </body>

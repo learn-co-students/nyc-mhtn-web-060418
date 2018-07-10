@@ -9,6 +9,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
+      log_in_user(@user.id)
       redirect_to secrets_path, notice: 'User was successfully created.'
     else
       render :new

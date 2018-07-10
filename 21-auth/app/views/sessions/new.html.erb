@@ -1,12 +1,10 @@
-<%= form_with(model: user, local: false) do |form| %>
-  <% if user.errors.any? %>
+<%= form_with(scope: "session", url: sessions_path, local: true) do |form| %>
+  <% if @error %>
     <div id="error_explanation">
-      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+      <h2>An error prohibited this user from being saved:</h2>
 
       <ul>
-      <% user.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
+        <li><%= @error %></li>
       </ul>
     </div>
   <% end %>
@@ -22,6 +20,6 @@
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit "Log in" %>
   </div>
 <% end %>
