@@ -1,0 +1,2 @@
+class Goat < ApplicationRecord
+end

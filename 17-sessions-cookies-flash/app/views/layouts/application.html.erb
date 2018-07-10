@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GoatCommerce</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+  </head>
+
+  <body>
+    <header>
+      HELLO
+      <h2><%= @flash %></h2>
+      <ol>
+        <% @cart.each do |goat_id| %>
+          <li>
+            <%= goat_id %>
+          </li>
+        <% end %>
+      </ol>
+    </header>
+    <%= yield %>
+  </body>
+</html>
