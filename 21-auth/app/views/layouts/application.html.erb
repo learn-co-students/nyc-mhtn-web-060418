@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Auth</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+  </head>
+
+  <body>
+    <header>
+      <%= link_to "Register", new_user_path %>
+      <%= link_to "Login", "/whatever" %>
+    </header>
+    <%= yield %>
+  </body>
+</html>
