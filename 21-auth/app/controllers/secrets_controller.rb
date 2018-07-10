@@ -9,6 +9,7 @@ class SecretsController < ApplicationController
 
   # GET /secrets/1
   def show
+    @secret
   end
 
   # GET /secrets/new
@@ -50,6 +51,7 @@ class SecretsController < ApplicationController
     def set_secret
       @secret = Secret.find(params[:id])
     end
+    
     def set_authors
       @authors = User.all
     end
