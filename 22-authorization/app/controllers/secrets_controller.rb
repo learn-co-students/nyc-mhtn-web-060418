@@ -34,7 +34,7 @@ class SecretsController < ApplicationController
 
   # PATCH/PUT /secrets/1
   def update
-    if @secret.update(secret_params)
+    if @secret.author == @logged_in_user && @secret.update(secret_params)
       redirect_to @secret, notice: 'Secret was successfully updated.'
     else
       render :edit
@@ -43,7 +43,7 @@ class SecretsController < ApplicationController
 
   # DELETE /secrets/1
   def destroy
-    @secret.destroy
+    @secret.destroy if @secret.author == @logged_in_user
     redirect_to secrets_url, notice: 'Secret was successfully destroyed.'
   end
 
