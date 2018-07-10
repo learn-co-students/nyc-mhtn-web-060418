@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  elevator: one
+  language: one
+  trigger_word: MyString
+  response: MyString
+
+two:
+  elevator: two
+  language: two
+  trigger_word: MyString
+  response: MyString

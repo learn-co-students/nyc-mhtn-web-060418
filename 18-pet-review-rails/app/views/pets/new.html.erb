@@ -1,0 +1,16 @@
+<h2>Create new PET!!!!!!!!!!</h2>
+
+<%= form_with model: @pet do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <br>
+  <br>
+  <%= f.label :species %>
+  <%= f.text_field :species %>
+  <br>
+  <br>
+  <%= f.collection_select :owner_id, @owners, :id, :name %>
+  <br>
+  <br>
+  <%= f.submit %>
+<% end %>
