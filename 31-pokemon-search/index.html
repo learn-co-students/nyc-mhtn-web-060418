@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Find all the Pokemons</title>
+    <script type="text/javascript" src="db.json"></script>
+    <script type="text/javascript" src="src/index.js"></script>
+
+    <style media="screen">
+      body {
+      font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+      font-weight: 300;
+      }
+
+      #container {
+        width:1000px;
+        margin:auto;
+        margin-top:50px;
+      }
+
+      #pokemon-search-form {
+        width:500px;
+        margin:auto;
+        margin-top:50px;
+      }
+
+      #pokemon-search-input {
+        font-size:3rem;
+        border:3px solid #fecd2f;
+        color: #2d72fc;
+      }
+
+      #pokemon-logo {
+        width:300px;
+        margin-left:330px;
+      }
+
+      input:focus {
+        outline: none;
+      }
+
+      .pokemon-container {
+        float:left;
+        width:250px;
+        margin:auto;
+      }
+
+      .center-text {
+        text-align: center;
+      }
+
+      .flip-image {
+        color:#2d72fc;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <img id="pokemon-logo" src="images/pokemon.png" alt="">
+      <form id="pokemon-search-form" class="" action="" method="">
+        <input id="pokemon-search-input" type="text" name="" value="">
+      </form>
+
+      <div id="pokemon-container">
+      </div>
+    </div>
+  </body>
+</html>

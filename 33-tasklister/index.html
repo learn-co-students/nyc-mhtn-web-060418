@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flatiron Task Lister</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="main-content">
+    <h1>Flatiron Task Lister</h1>
+
+    <form id="create-list-form" action="#" method="post">
+     <label for="new-list-title">Add a new list:</label>
+     <input required type="text" id="new-list-title" name="new-list-title" placeholder="title">
+     <input data-action='create-new-list' id="new-list-submit-button" type="submit" value="Create New List">
+    </form>
+
+    <div id="app-content"></div>
+
+
+    <script src="src/index.js"></script>
+  </div><!-- #main-content -->
+
+</body>
+</html>
