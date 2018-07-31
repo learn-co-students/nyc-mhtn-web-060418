@@ -1,39 +1,33 @@
 const Task = (function() {
   let taskCounter = 0
   let tasks = []
-
   return class Task {
     constructor(description, priority, listId) {
-      this.id = ++taskCounter
       this.description = description
       this.priority = priority
-      this.listId = parseInt(listId)
+      this.listId = listId
+      this.id = ++taskCounter
       tasks.push(this)
     }
 
     static all() {
-      return [...tasks]
+      return Array.from(tasks)
     }
 
-    static destroyTaskAssociatedToListId(id) {
-      tasks = tasks.filter(taskObj => taskObj.listId !== parseInt(id))
+    static taskForListId(id) {
+      return this.all().filter(taskObj => taskObj.listId === id)
     }
 
-    static destroyTask(id) {
-      tasks = tasks.filter(taskObj => taskObj.id !== parseInt(id))
+    static deleteTasksAssociatedToListId(id) {
+      tasks = tasks.filter(taskObj => taskObj.listId !== id)
+    }
+
+    static deleteTask(id) {
+      tasks = tasks.filter(taskObj => taskObj.id !== id)
     }
 
     toHTML() {
-      return `
-              <li>
-                Task: ${this.description}
-                <button data-action="delete-task" data-task-id="${this.id}" class="delete-task">
-                X
-                </button>
-                <br>
-                Priority:  ${this.priority}
-              </li>
-             `
+      return TaskListerViews.taskHTML(this)
     }
   }
 })()

@@ -1,3 +1,3 @@
-document.addEventListener('DOMContentLoaded', () => {
-  TaskLister.start(document.getElementById("app-content"))
+document.addEventListener('DOMContentLoaded', function() {
+  TaskLister.start(document.getElementById("app-content"));
 });

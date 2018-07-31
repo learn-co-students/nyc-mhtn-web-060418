@@ -1,7 +1,6 @@
 const List = (function () {
   let listCounter = 0
   let lists = []
-
   return class List {
     constructor(name) {
       this.name = name
@@ -10,39 +9,20 @@ const List = (function () {
     }
 
     static all() {
-      return [...lists]
+      return Array.from(lists)
     }
 
-    static createNewTask() {
-      new Task()
+    static deleteListWithId(id) {
+      lists = lists.filter(listObj => listObj.id !== id)
+      Task.deleteTasksAssociatedToListId(id)
     }
 
-    static destroyList(id) {
-      Task.destroyTaskAssociatedToListId(id)
-      lists = lists.filter(listObj => listObj.id !== parseInt(id))
-    }
-
-    ownTasks() {
-      return Task.all().filter(taskObj => taskObj.listId === this.id)
-    }
-
-    ownTasksHTML() {
-      return this.ownTasks().map(taskOBj => taskOBj.toHTML()).join('')
+    tasks() {
+      return Task.taskForListId(this.id)
     }
 
     toHTML() {
-      return `
-              <div>
-                <h2>${this.name}
-                  <button data-action='delete-list' data-list-id='${this.id}' class="delete-list">
-                    X
-                  </button>
-                </h2>
-                <ul>
-                  ${this.ownTasksHTML()}
-                </ul>
-              </div>
-             `
+      return TaskListerViews.allLists(this.all())
     }
   }
 })()
