@@ -1,0 +1,13 @@
+<h1>Create a Farmer</h1>
+
+<%= form_for @farmer do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <br>
+  <%= f.fields_for :cows do |cow| %>
+  <%= cow.label :name %>
+  <%= cow.text_field :name %>
+  <%end%>
+  <br>
+  <%= f.submit %>
+<% end %>
