@@ -40,3 +40,9 @@
 #rapperForm{
   float: right
 }
+
+#form{
+  width: 50%;
+  float: right;
+  text-align: center;
+}

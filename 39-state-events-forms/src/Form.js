@@ -30,29 +30,35 @@ class Form extends Component {
 
   render(){
     return(
-      <form id="rapperForm" onSubmit={this.submitHandler}>
-        <input
-          type="text"
-          id="name"
-          value={this.state.name}
-          onChange={this.handleChange}
-         />
-        <input
-          type="text"
-          id="sadImage"
-          value={this.state.sadImage}
-          onChange={this.handleChange}
-         />
-        <input
-          type="text"
-          id="happyImage"
-          value={this.state.happyImage}
-          onChange={this.handleChange}
-         />
-         <button
-           value="Submit"
-           >Button</button>
-      </form>
+      <div id="form">
+        <h4>Add A Rapper</h4>
+        <form id="rapperForm" onSubmit={this.submitHandler}>
+          <input
+            type="text"
+            id="name"
+            placeholder="Enter Rapper Name"
+            value={this.state.name}
+            onChange={this.handleChange}
+           />
+          <input
+            type="text"
+            id="sadImage"
+            placeholder="Enter sadImage URL"
+            value={this.state.sadImage}
+            onChange={this.handleChange}
+           />
+          <input
+            type="text"
+            id="happyImage"
+            placeholder="Enter happyImage URL"
+            value={this.state.happyImage}
+            onChange={this.handleChange}
+           />
+           <button
+             value="Submit"
+             >Button</button>
+        </form>
+      </div>
     )
   }
 }
