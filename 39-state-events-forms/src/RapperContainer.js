@@ -11,7 +11,6 @@ class RapperContainer extends Component {
   render(){
     return (
       <div id="rapperContainer">
-        <h1>Rapper Container</h1>
         {this.mapRappers()}
       </div>
     );
