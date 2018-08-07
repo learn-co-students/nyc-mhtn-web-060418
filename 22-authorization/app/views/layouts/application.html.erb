@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Auth</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+  </head>
+
+  <body>
+    <header>
+      <% if @logged_in_user %>
+        Logged in as: <%= @logged_in_user.username %>
+        <%= link_to "Logout", logout_path, method: 'delete' %>
+      <% else %>
+        <%= link_to "Register", new_user_path %>
+        <%= link_to "Login", new_session_path %>
+      <% end %>
+    </header>
+    <%= yield %>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+<%= form_with(scope: "session", url: sessions_path, local: true) do |form| %>
+  <% if @error %>
+    <div id="error_explanation">
+      <h2>An error prohibited this user from being saved:</h2>
+
+      <ul>
+        <li><%= @error %></li>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :username %>
+    <%= form.text_field :username %>
+  </div>
+
+  <div class="field">
+    <%= form.label :password %>
+    <%= form.password_field :password %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Log in" %>
+  </div>
+<% end %>

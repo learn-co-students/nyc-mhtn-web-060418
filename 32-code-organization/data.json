@@ -1,0 +1,14 @@
+{
+  "gelati": [
+    {
+      "name": "Brady Vanilla",
+      "id": 2
+    }
+  ],
+  "icecreams": [
+    {
+      "name": "US Brady Vanilla",
+      "id": 1
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+<%= form_with(model: goat, local: true) do |form| %>
+  <% if goat.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(goat.errors.count, "error") %> prohibited this goat from being saved:</h2>
+
+      <ul>
+      <% goat.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :lifetime_headbutts %>
+    <%= form.text_field :lifetime_headbutts %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

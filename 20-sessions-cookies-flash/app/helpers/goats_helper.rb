@@ -1,0 +1,2 @@
+module GoatsHelper
+end

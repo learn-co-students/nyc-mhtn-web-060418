@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @goat.name %>
+</p>
+
+<p>
+  <strong>Lifetime Headbutts:</strong>
+  <%= @goat.lifetime_headbutts %>
+</p>
+
+<%= link_to 'Edit', edit_goat_path(@goat) %> |
+<%= link_to 'Back', goats_path %>

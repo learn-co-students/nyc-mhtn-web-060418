@@ -1,0 +1,84 @@
+body {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+    Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+}
+
+li {
+  padding: 5px;
+}
+
+a {
+  font-size: 1.5rem;
+}
+
+/* About Browser events styles */
+.objectives {
+  width: 1000px;
+  margin: auto;
+  margin-top: 100px;
+}
+
+.box {
+  width: 250px;
+  height: 250px;
+  float: left;
+}
+
+#box-1 {
+  background-color: #ffff00;
+}
+#box-2 {
+  background-color: #ffdd00;
+}
+#box-3 {
+  background-color: #ffbb00;
+}
+#box-4 {
+  background-color: #ff9900;
+}
+#box-5 {
+  background-color: #ff7700;
+}
+#box-6 {
+  background-color: #ff4400;
+}
+#box-7 {
+  background-color: #ff0000;
+}
+#box-8 {
+  background-color: #ff1066;
+}
+
+/* listen page styles */
+
+#listen-for-event {
+  width: 500px;
+  margin: auto;
+  display: block;
+  margin-top: 50px;
+}
+
+#sugar {
+  width: 200px;
+  height: 200px;
+  border: 50px solid #181717;
+  margin: auto;
+  margin-top: 100px;
+  transform: rotate(-45deg);
+}
+
+/* Bubbling page styles */
+#milk {
+  width: 100px;
+  height: 100px;
+  border: 50px solid #f5f5dc;
+  margin: auto;
+}
+
+#espresso {
+  width: 100px;
+  height: 100px;
+  background: #8b4513;
+  margin: auto;
+}

@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Goats</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Lifetime Headbutts</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @goats.each do |goat| %>
+      <tr>
+        <td><%= goat.name %></td>
+        <td><%= goat.lifetime_headbutts %></td>
+        <td><%= link_to 'Show', goat %></td>
+        <td><%= link_to 'Edit', edit_goat_path(goat) %></td>
+        <td><%= button_to 'Add To Cart', cart_list_items_path, method: :post, params: { goat_id: goat.id } %></td>
+        <td><%= link_to 'Destroy', goat, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Goat', new_goat_path %>

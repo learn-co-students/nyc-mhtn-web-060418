@@ -1,12 +1,29 @@
 <h1>Create a Cow</h1>
 
+<% if flash[:notice] %>
+  <h1><%= flash[:notice] %></h1>
+  <ul>
+    <% @cow.errors.messages.map do |error_type, messages| %>
+    <li><%= error_type %>: <%= messages.join(" ") %></li>
+    <% end %>
+  </ul>
+<% end %>
+
 <%= form_for @cow do |f| %>
   <%= f.label :name %>
   <%= f.text_field :name %>
   <br>
   <%= f.label :spots %>
-  <%= f.number_field :spots, value: rand(0..15) %>
+  <%# f.number_field :spots, value: rand(0..15) %>
+  <%= f.number_field :spots %>
   <br>
+  <!--
+  collection select is looking for the following in order:
+  1. the method we want to call on @cow: farmer_id
+  2. the collection we want to use to populate our dropdown with: Farmer.all
+  3. the value method; what will show up in our params and as a value in our <option> tags: farmer_instance.id
+  4. the text method; what will show up inside the option tag, what will the user see? farmer_instance.name
+ -->
   <%= f.collection_select :farmer_id, Farmer.all, :id, :name %>
   <br>
   <%= f.submit %>
