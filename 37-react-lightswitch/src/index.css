@@ -1,0 +1,33 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+
+}
+
+.switches {
+  display: flex;
+  list-style-type: none;
+}
+
+.lightswitch {
+  width: 200px;
+  background-color: navy;
+  height: 200px;
+  margin: auto;
+  padding: 20px;
+  color: pink;
+}
+.lightswitch.on {
+  background-color: yellow;
+}
+.lightswitch button {
+  background: pink;
+  border: none;
+  padding: 20px;
+  font-size: 18px;
+}
+form {
+  color: black;
+  padding: 100px;
+}
