@@ -1,0 +1,29 @@
+.cat-profiles {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    flex-wrap: wrap;
+    padding: 0;
+}
+
+.cat-profile {
+    width: 300px;
+    min-width: 300px;
+    margin: 25px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,.25);
+    border-radius: 5px;
+    padding: 0 20px 20px;
+    text-align: left;
+}
+
+.cat-profile img {
+  width: calc(100% - 20px);
+  border: 10px solid grey;
+  border-radius: 5px;
+}
+
+.cat-profile p {
+  text-align: center;
+  font-size: 1.25em;
+}

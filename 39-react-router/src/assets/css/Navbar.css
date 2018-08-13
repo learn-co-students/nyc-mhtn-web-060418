@@ -1,0 +1,25 @@
+.navbar {
+  display: flex;
+  justify-content: space-around;
+}
+
+.navbar button,
+.navbar a {
+  flex: 1;
+  font-size: 16px;
+  padding: 10px;
+  margin: 5px 25px;
+  border: 1px solid grey;
+  border-radius: 0;
+}
+
+.navbar button:hover,
+.navbar button.active,
+.navbar a:hover,
+.navbar a:hover {
+  background-color: yellow;
+}
+
+.navbar button:focus {
+  outline: none;
+}
