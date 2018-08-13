@@ -1,6 +1,11 @@
 import React, { Fragment } from 'react';
 
-const Profile = ({ name, avatar, description }) => {
+const Profile = (props) => {
+  const { name, avatar, description } = props;
+  // name = props.name
+
+  console.log(props);
+
   return (
     <Fragment>
       <h2>{name}</h2>

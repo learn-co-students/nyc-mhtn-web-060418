@@ -14,7 +14,7 @@
 }
 
 .navbar button:hover,
-.navbar button.active,
+.navbar a.active,
 .navbar a:hover,
 .navbar a:hover {
   background-color: yellow;

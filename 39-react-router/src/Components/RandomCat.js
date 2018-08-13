@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 const catStyle = {
   margin: '10px 0',
@@ -19,9 +19,18 @@ class RandomCat extends Component {
       })
   }
 
+  handleClick = (event) => {
+    this.props.history.push('/profiles');
+  }
+
   render() {
+    console.log(this.props);
+
     return (
-      <img style={catStyle} src={this.state.picture} alt='random cat pic' />
+      <Fragment>
+        <img style={catStyle} src={this.state.picture} alt='random cat pic' />
+        <button onClick={this.handleClick}>Click Me!</button>
+      </Fragment>
     )
   }
 }
