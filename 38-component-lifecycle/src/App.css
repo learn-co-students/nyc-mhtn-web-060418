@@ -1,0 +1,35 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 10s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  0% { transform: rotateY(0deg) rotateX(0deg) rotateZ(0deg); }
+  12.5% { transform: rotateY(180deg) rotateX(0deg) rotateZ(0deg); }
+  25% { transform: rotateY(180deg) rotateX(180deg) rotateZ(0deg); }
+  37.5% { transform: rotateY(0deg) rotateX(180deg) rotateZ(0deg); }
+  50% { transform: rotateY(0deg) rotateX(180deg) rotateZ(180deg); }
+  62.5% { transform: rotateY(0deg) rotateX(0deg) rotateZ(180deg); }
+  75% { transform: rotateY(0deg) rotateX(0deg) rotateZ(0deg); }
+  87.5% { transform: rotateY(0deg) rotateX(0deg) rotateZ(0deg); }
+  100% { transform: rotateY(0deg) rotateX(0deg) rotateZ(0deg); }
+}

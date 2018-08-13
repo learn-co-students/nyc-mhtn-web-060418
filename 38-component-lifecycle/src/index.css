@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.component {
+  border: 10px dotted blue;
+  padding: 30px;
+  margin: 45px;
+  min-height: 100px;
+}
+.grandparent {
+  background: skyblue;
+}
+.parent {
+  border-color: green;
+  background: #99ff99;
+
+}
+
+.child {
+  border-color: red;
+  background: pink;
+}
