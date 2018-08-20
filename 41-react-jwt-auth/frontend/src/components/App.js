@@ -20,7 +20,7 @@ class App extends Component {
           <Route
             exact
             path="/my-snacks"
-            render={(routerProps) => <MySnacks {...routerProps} userId={1} />}
+            render={(routerProps) => <MySnacks {...routerProps} />}
           />
         </div>
     );

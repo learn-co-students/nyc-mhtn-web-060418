@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
 
+  # /api/v1/users
+  # /users
   def index
     render json: User.all
   end
@@ -8,7 +10,13 @@ class UsersController < ApplicationController
     @user = User.find_by(id: params[:id])
     render json: @user
   end
-  
+
+  # username
+  # password_thing => password_digest
+  # HAS_AUTHENTICATED_PASSWORD ===> bycrpt => has_secure_password
+  # hash (salt) + password => unique hash
+  # different users, same password ==> but this results in a different unique hash
+  # rainbow table => uses all the most common passwords
   def create
     @user = User.new
 
@@ -27,10 +35,18 @@ class UsersController < ApplicationController
     end
   end
 
+  # /users/:id/snacks
   def users_snacks
-    @user = User.find_by(id: params[:user_id])
+    # if we want to do authorization, more ifs!
+    if (params[:user_id] == request.headers['Authorization'] && User.find(request.headers['Authorization'])) # we need to fix this error
+      @user = User.find_by(id: params[:user_id])
 
-    render json: @user.snacks
+      render json: @user.snacks
+    else
+      render json: {
+        errors: 'Not your snacks!'
+      }, status: :unauthorized
+    end
   end
 
 end

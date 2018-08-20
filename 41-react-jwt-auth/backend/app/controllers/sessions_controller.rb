@@ -1,8 +1,12 @@
 class SessionsController < ApplicationController
 
+  # sessions => we don't use sessions anymore
+  # we make tokens the same way we make sessions
+  # /sessions => /token => /login
+  # CSRF => really long number
   def create
     @user = User.find_by(username: params["username"])
-    
+
     if (@user && @user.authenticate(params["password"]))
       render json: {
         username: @user.username,
