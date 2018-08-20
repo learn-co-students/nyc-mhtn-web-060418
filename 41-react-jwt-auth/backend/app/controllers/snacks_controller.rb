@@ -1,5 +1,6 @@
  class SnacksController < ApplicationController
-
+   before_action :authenticate, only: [:index]
+   
   # authenticate
   def index
     # if he has an id
@@ -13,13 +14,24 @@
     # } catch(exception) {
     #
     # }
-    if (User.find(request.headers['Authorization'])) # we need to fix this error
-      render json: Snack.all
-    else
-      render json: {
-        errors: 'No snacks for you.'
-      }, status: :unauthorized
-    end
+    # begin
+    #   # unsafe code goes here
+    # rescue #error goes here
+    #   # catch
+    # end
+
+    # if (User.find(request.headers['Authorization'])) # we need to fix this error
+    # authentication
+    # if (is_valid_token?())
+    #   render json: Snack.all
+    # else
+    #   render json: {
+    #     errors: 'No snacks for you.'
+    #   }, status: :unauthorized
+    # end
+    # authenticate('Error')
+
+    render json: Snack.all
   end
 
 end

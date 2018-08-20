@@ -5,12 +5,17 @@ class SessionsController < ApplicationController
   # /sessions => /token => /login
   # CSRF => really long number
   def create
+    # make a token in here
     @user = User.find_by(username: params["username"])
 
     if (@user && @user.authenticate(params["password"]))
+      # payload = { "sub": @user.id }
+      # token = JWT.encode payload, get_secret_key(), 'HS256'
+
       render json: {
         username: @user.username,
-        id: @user.id
+        id: @user.id,
+        token: token_creator_maker()
       }
     else
       render json: {
