@@ -3,10 +3,19 @@ import { NoSnacksForYouError } from './SnackExceptions';
 const API_URL = 'http://localhost:3000';
 
 export default class SnackAdapter {
+  static getToken() {
+    return localStorage.getItem('token');
+  }
+
+  static isLoggedIn() {
+    return !!SnackAdapter.getToken();
+  }
+
   static getSnacks() {
     const config = {
       headers: {
         "Content-Type": "application/json",
+        "Authorization": SnackAdapter.getToken(), //localStorage.getItem('user_id'),
       },
     };
 
@@ -27,6 +36,7 @@ export default class SnackAdapter {
     const config = {
       headers: {
         "Content-Type": "application/json",
+        "Authorization": SnackAdapter.getToken(),
       },
     };
 

@@ -14,6 +14,32 @@ class LoginForm extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+
+    // we're "creating" a "session"
+    // we don't have sessions => user_id => token
+    fetch('http://localhost:3000/sessions', {
+      method: "POST",
+      headers: { "Content-Type": 'application/json' },
+      body: JSON.stringify(this.state)
+      // body: JSON.stringify({ username: this.state.username, password: this.state.password })
+    })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error('Failed to login')
+      })
+      .then(json => {
+        console.log('we have a "token" which is: ', json);
+        localStorage.setItem("token", json.token);
+        this.props.onSuccessfulLogin(json.id);
+        // localStorage.removeItem("user_id");
+        // console.log(localStorage.getItem("user_id"));
+        this.props.history.push("/");
+      })
+      .catch(err => {
+        console.warn('You have been warned.', err);
+      })
   }
 
   render() {

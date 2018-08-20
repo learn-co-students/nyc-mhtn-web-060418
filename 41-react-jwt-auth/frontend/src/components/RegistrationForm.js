@@ -14,6 +14,9 @@ class RegistrationForm extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+
+    // SnackAdapter.postRegistration(this.state.username, this.state.password)
+    //   .then
   }
 
   render() {
