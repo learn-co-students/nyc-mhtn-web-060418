@@ -1,0 +1,76 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.App {
+
+}
+
+.nav {
+  display: flex;
+  text-align: center;
+}
+
+.nav a {
+  flex: 1;
+  padding: 10px;
+  margin: 5px 15px;
+  border: 1px solid black;
+  text-decoration: none;
+  color: black;
+}
+
+.nav a:hover, .selected {
+  background: yellow;
+}
+
+button.logout-button {
+  flex: 1;
+  padding: 10px;
+  margin: 5px 15px;
+  border: 1px solid black;
+  text-decoration: none;
+  color: black;
+  border-radius: 0;
+  font-size: 1em;
+  font-family: sans-serif;
+}
+
+button.logout-button:hover {
+  background: yellow;
+}
+
+.welcome {
+  text-align: center;
+}
+
+.login *,
+.registration * {
+  font-size: 20px;
+}
+
+div.login, div.registration {
+  margin-top: 10px;
+}
+
+.login label {
+  margin: 0 20px;
+}
+
+.login input[type="submit"] {
+  margin: 0 20px;
+}
+
+.registration label {
+  margin: 0 20px;
+}
+
+.registration input[type="submit"] {
+  margin: 0 20px;
+}
+
+div.snacks, div.my-snacks {
+  margin-left: 20px;
+}
