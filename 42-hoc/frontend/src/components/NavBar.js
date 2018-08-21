@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
 import SnackAdapter from '../apis/SnackAdapter';
+import LogoutButton from './LogoutButton';
 
 const NavBar = (props) => {
   return (
@@ -16,6 +17,7 @@ const NavBar = (props) => {
         <Fragment>
           <NavLink activeClassName="selected" exact to="/snacks">Snacks</NavLink>
           <NavLink activeClassName="selected" exact to="/my-snacks">My Snacks</NavLink>
+          <LogoutButton />
         </Fragment>
       }
     </header>

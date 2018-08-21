@@ -7,6 +7,14 @@ import LoginForm from './LoginForm';
 import Snacks from './Snacks';
 import MySnacks from './MySnacks';
 import SnackAdapter from '../apis/SnackAdapter';
+import withAuth from '../hocs/withAuth';
+import withLoading from '../hocs/withLoading';
+import withAd from '../hocs/withAd';
+
+// const AuthedRegistrationForm = withAuth(RegistrationForm);
+// const AuthedLoginForm = withAuth(LoginForm);
+const AuthedSnacks = withAuth(Snacks);
+const AuthedMySnacks = withAuth(MySnacks);
 
 // sessions are stored in the server but where????
 // database, memory, filesystem
@@ -32,6 +40,8 @@ class App extends Component {
   }
 
   render() {
+    // const LoadingMyAuthedSnacks = withLoading(AuthedMySnacks, () => SnackAdapter.getMySnacks(this.state.userId))
+
     return (
         <div className="App">
           <NavBar />
@@ -44,18 +54,17 @@ class App extends Component {
                 <Route exact path="/login" render={(routerProps) => <LoginForm {...routerProps} onSuccessfulLogin={this.updateUserId} />} />
               </Fragment>
               :
-              <Fragment>
-                <Route exact path="/snacks" component={Snacks} />
-                <Route
-                  exact
-                  path="/my-snacks"
-                  render={(routerProps) => <MySnacks {...routerProps} userId={this.state.userId} />}
-                />
-              </Fragment>
+              null
             }
+          <Route exact path="/snacks" component={AuthedSnacks} />
+          <Route
+            exact
+            path="/my-snacks"
+            render={(routerProps) => <AuthedMySnacks {...routerProps} userId={this.state.userId} />}
+          />
         </div>
     );
   }
 }
 
-export default App;
+export default withAuth(withLoading(withAd(App), SnackAdapter.getProfile));

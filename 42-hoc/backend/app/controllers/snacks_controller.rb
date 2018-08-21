@@ -1,6 +1,6 @@
  class SnacksController < ApplicationController
    before_action :authenticate, only: [:index]
-   
+
   # authenticate
   def index
     # if he has an id
@@ -30,7 +30,7 @@
     #   }, status: :unauthorized
     # end
     # authenticate('Error')
-
+    # byebug
     render json: Snack.all
   end
 

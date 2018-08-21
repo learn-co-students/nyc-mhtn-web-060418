@@ -4,21 +4,21 @@ import SnackAdapter from '../apis/SnackAdapter';
 
 class MySnacks extends Component {
   state = {
-    snacks: [],
+    snacks: this.props.initialData,
   }
 
-  componentDidMount() {
-    this.getMySnacks();
-  }
-
-  getMySnacks = () => {
-    SnackAdapter.getMySnacks(this.props.userId)
-      .then(json => {
-        this.setState({
-          snacks: json,
-        });
-      });
-  }
+  // componentDidMount() {
+  //   this.getMySnacks();
+  // }
+  //
+  // getMySnacks = () => {
+  //   SnackAdapter.getMySnacks(this.props.userId)
+  //     .then(json => {
+  //       this.setState({
+  //         snacks: json,
+  //       });
+  //     });
+  // }
 
   render() {
     return (

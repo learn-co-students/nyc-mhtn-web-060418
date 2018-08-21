@@ -43,6 +43,8 @@ class LoginForm extends Component {
   }
 
   render() {
+    console.log('inside LoginForm', this.props);
+    
     return (
       <div className="login">
         <form onSubmit={this.handleSubmit}>
