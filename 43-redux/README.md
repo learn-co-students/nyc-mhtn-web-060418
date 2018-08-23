@@ -21,6 +21,21 @@ Intro to Redux
 - [ ] Prove it to me.
 - [ ] FAQ / Q&A
 
+React
+- really modular
+- really encapsulated
+- don't have to write as much HTML, JSX is nice
+- no more innerHTML, query selectors
+- easier to listen to events, know where they are
+- makes a lot of sense, nesting renders and defining that layer
+
+- manage state everywhere
+- refactoring/moving state
+- if you're managing state and refactor it, you have to edit all the subsequent props
+- passing down multiple layers (4-6)
+- naming within the context of the component
+- [x] async with render and lifecycle can get tricky
+
 ## Vocabulary
 
 My potentially controversial take:
