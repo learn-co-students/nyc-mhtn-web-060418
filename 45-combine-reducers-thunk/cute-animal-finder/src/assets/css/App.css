@@ -1,0 +1,70 @@
+.App {
+  text-align: center;
+  display: flex;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animal-picture {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin: 10px;
+}
+
+.animal-picture img {
+  box-sizing: border-box;
+  width: 100%;
+  border: 5px solid grey;
+  border-radius: 5px;
+}
+
+.animal-picture button {
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 20px;
+  border: 3px solid grey;
+}
+
+.user-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin: 10px;
+}
+
+.user-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-container form input {
+  margin-bottom: 10px;
+}
+
+.user-container * {
+  font-size: 18px;
+}
