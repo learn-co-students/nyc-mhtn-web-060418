@@ -1,10 +1,10 @@
-export function loginUser(username, password) {
+export const loginUser = (username, password) => {
   return dispatch => {
     fetch('http://localhost:3000/api/v1/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Accept: 'application/json'
+        'Accept': 'application/json'
       },
       body: JSON.stringify({ user: { username, password } })
     })
@@ -13,9 +13,7 @@ export function loginUser(username, password) {
   }
 }
 
-export function setCurrentUser(userData) {
-  return {
-    type: 'SET_CURRENT_USER',
-    payload: userData
-  }
-}
+export const setCurrentUser = userData => ({
+  type: 'SET_CURRENT_USER',
+  payload: userData
+})

@@ -1,9 +1,9 @@
-const usersReducer = (state={ username: null }, action) => {
+const usersReducer = (state = { user: null }, action) => {
   switch (action.type) {
-    case "SET_CURRENT_USER":
+    case 'SET_CURRENT_USER':
       localStorage.setItem('jwt', action.payload.jwt)
-      console.log({...state, username: action.payload.username})
-      return {...state, username: action.payload.username}
+      const { user } = action.payload
+      return { ...state, user }
     default:
       return state
   }
