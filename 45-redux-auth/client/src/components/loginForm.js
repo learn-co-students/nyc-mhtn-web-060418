@@ -4,36 +4,39 @@ import { loginUser } from '../actions/user'
 
 class LoginForm extends React.Component {
   state = {
-    username: "",
-    password: ""
+    username: '',
+    password: ''
   }
 
-  handleUsernameChange = (event) => {
+  handleUsernameChange = event => {
     this.setState({
       username: event.target.value
     })
   }
 
-  handlePasswordChange = (event) => {
+  handlePasswordChange = event => {
     this.setState({
       password: event.target.value
     })
   }
 
-  handleLoginSubmit = (event) => {
+  handleLoginSubmit = event => {
     event.preventDefault()
     this.props.loginUser(this.state.username, this.state.password)
   }
 
   render() {
-    return(
+    return (
       <form onSubmit={this.handleLoginSubmit}>
-        <input type="text" value={this.state.username} onChange={this.handleUsernameChange}></input>
-        <input type="password" value={this.state.password} onChange={this.handlePasswordChange}></input>
+        <input type="text" value={this.state.username} onChange={this.handleUsernameChange} />
+        <input type="password" value={this.state.password} onChange={this.handlePasswordChange} />
         <button type="submit">Login</button>
       </form>
     )
   }
 }
 
-export default connect(null, { loginUser })(LoginForm)
+export default connect(
+  null,
+  { loginUser }
+)(LoginForm)

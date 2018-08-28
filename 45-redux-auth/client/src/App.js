@@ -1,8 +1,8 @@
-import React from 'react';
+import React from 'react'
 import { Route, NavLink } from 'react-router-dom'
 import Profile from './components/profile'
 import LoginForm from './components/loginForm'
-// import './App.css';
+import './App.css'
 
 const App = () => {
   return (
@@ -15,4 +15,4 @@ const App = () => {
   )
 }
 
-export default App;
+export default App
