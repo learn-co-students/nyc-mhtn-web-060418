@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 const UserList = ({ users }) => {
+  // console.log(users);
+
   return (
     <ul>
       {users.map(user => <li key={user.id}>{user.name} | {user.email}</li>)}
@@ -10,8 +12,10 @@ const UserList = ({ users }) => {
 }
 
 function mapStateToProps(state) {
+  console.log(state, state.users);
+
   return {
-    users: state.users
+    users: state.user.users
   }
 }
 
