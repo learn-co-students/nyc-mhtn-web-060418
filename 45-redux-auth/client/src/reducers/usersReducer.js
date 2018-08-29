@@ -9,6 +9,7 @@ const defaultState = {
 const usersReducer = (state = defaultState, action) => {
   switch (action.type) {
     case 'SET_CURRENT_USER':
+      //action.payload {username: 'Chandler Bing', bio: 'my user bio', avatar: 'some image url'}
       return { ...state, user: action.payload, loggedIn: true, authenticatingUser: false }
     case 'AUTHENTICATING_USER':
       return { ...state, authenticatingUser: true }

@@ -21,4 +21,5 @@ const mapStateToProps = ({ usersReducer: { user: { avatar, username, bio } } }) 
   bio
 })
 
+// TODO: move this to withAuth
 export default withAuth(connect(mapStateToProps)(Profile))

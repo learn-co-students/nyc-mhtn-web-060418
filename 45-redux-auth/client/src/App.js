@@ -22,4 +22,4 @@ const App = props => {
   )
 }
 
-export default withRouter(withAuth(App))
+export default withRouter(App)
