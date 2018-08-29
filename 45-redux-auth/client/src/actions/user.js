@@ -10,7 +10,10 @@ export const loginUser = (username, password) => {
       body: JSON.stringify({ user: { username, password } })
     })
       .then(response => response.json())
-      .then(userData => dispatch(setCurrentUser(userData)))
+      .then(({ user, jwt }) => {
+        localStorage.setItem('jwt', jwt)
+        dispatch(setCurrentUser(user))
+      })
   }
 }
 

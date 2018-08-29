@@ -1,16 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Card, Segment, Loader } from 'semantic-ui-react'
+import { Card, Image } from 'semantic-ui-react'
 import withAuth from '../hocs/withAuth'
 
-const Profile = props => {
-  return <Segment>{/* <Loader size="medium" active={props.authenticatingUser} /> */}</Segment>
-}
+const Profile = ({ avatar, username, bio }) => (
+  <Card>
+    <Image src={avatar} />
+    <Card.Content>
+      <Card.Header>{username}</Card.Header>
 
-const mapStateToProps = state => ({
-  username: state.usersReducer.username,
-  profilePhoto: state.usersReducer.profilePhoto,
-  authenticatingUser: state.usersReducer.authenticatingUser
+      <Card.Description>{bio}</Card.Description>
+    </Card.Content>
+  </Card>
+)
+
+// instead of state.usersReducer.user.username, state.usersReducer.user.avatar
+const mapStateToProps = ({ usersReducer: { user: { avatar, username, bio } } }) => ({
+  avatar,
+  username,
+  bio
 })
 
 export default withAuth(connect(mapStateToProps)(Profile))
