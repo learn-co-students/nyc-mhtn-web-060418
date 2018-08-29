@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
+import { withRouter, Redirect } from 'react-router'
 import { loginUser } from '../actions/user'
 import { Button, Form, Segment, Message } from 'semantic-ui-react'
 
@@ -15,8 +15,9 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    // TODO: redirect to profile fi we r logged in
-    return (
+    return this.props.loggedIn ? (
+      <Redirect to="/profile" />
+    ) : (
       <Segment>
         <Form
           onSubmit={this.handleLoginSubmit}
@@ -54,7 +55,8 @@ const mapStateToProps = state => ({
   authenticatingUser: state.usersReducer.authenticatingUser,
   failedLogin: state.usersReducer.failedLogin,
   loginError: state.usersReducer.error,
-  user: state.usersReducer.username
+  user: state.usersReducer.username,
+  loggedIn: state.usersReducer.loggedIn
 })
 
 export default withRouter(

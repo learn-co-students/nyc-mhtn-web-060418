@@ -3,10 +3,10 @@ import { Route, NavLink, Switch, Redirect, withRouter } from 'react-router-dom'
 import Profile from './components/profile'
 import LoginForm from './components/loginForm'
 import Nav from './components/nav'
+import withAuth from './hocs/withAuth'
 import './App.css'
 
 const App = props => {
-  console.log('%c APP PROPS', props, 'color: red')
   return (
     <Fragment>
       <Nav />
@@ -22,4 +22,4 @@ const App = props => {
   )
 }
 
-export default withRouter(App)
+export default withRouter(withAuth(App))

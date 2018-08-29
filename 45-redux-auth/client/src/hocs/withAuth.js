@@ -7,18 +7,14 @@ import { Loader } from 'semantic-ui-react'
 const withAuth = WrappedComponent => {
   class AuthorizedComponent extends React.Component {
     componentDidMount() {
-      if (localStorage.getItem('jwt') && !this.props.loggedIn) {
-        this.props.fetchCurrentUser()
-      }
+      if (localStorage.getItem('jwt') && !this.props.loggedIn) this.props.fetchCurrentUser()
     }
-
+    // TODO: if we're logged in and on login, kick over to profile
     render() {
       if (localStorage.getItem('jwt') && this.props.loggedIn) {
         return <WrappedComponent />
-      } else if (localStorage.getItem('jwt') && !this.props.loggedIn) {
+      } else if (localStorage.getItem('jwt') && this.props.authenticatingUser) {
         return <Loader active inline="centered" />
-      } else {
-        return <Redirect to="/home" />
       }
     }
   }
@@ -29,6 +25,9 @@ const withAuth = WrappedComponent => {
   )(AuthorizedComponent)
 }
 
-const mapStateToProps = state => ({ loggedIn: state.usersReducer.loggedIn })
+const mapStateToProps = state => ({
+  loggedIn: state.usersReducer.loggedIn,
+  authenticatingUser: state.usersReducer.authenticatingUser
+})
 
 export default withAuth

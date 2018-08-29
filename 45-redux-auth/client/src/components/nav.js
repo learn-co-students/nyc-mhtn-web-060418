@@ -6,7 +6,6 @@ import * as actions from '../actions'
 import withAuth from '../hocs/withAuth'
 
 const Nav = ({ user: { loggedIn }, location: { pathname } }) => {
-  console.log(loggedIn, pathname)
   return (
     <Menu pointing secondary>
       {loggedIn ? (
