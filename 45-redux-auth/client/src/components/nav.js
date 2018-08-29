@@ -1,9 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { NavLink, withRouter } from 'react-router-dom'
-import { Menu, Image } from 'semantic-ui-react'
-import * as actions from '../actions'
-import withAuth from '../hocs/withAuth'
+import { Menu } from 'semantic-ui-react'
 
 const Nav = ({ user: { loggedIn }, location: { pathname } }) => {
   return (

@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react'
-import { Route, NavLink, Switch, Redirect, withRouter } from 'react-router-dom'
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import Profile from './components/profile'
 import LoginForm from './components/loginForm'
 import Nav from './components/nav'
-import withAuth from './hocs/withAuth'
+import NotFound from './components/notFound'
 import './App.css'
 
 const App = props => {
@@ -11,12 +11,11 @@ const App = props => {
     <Fragment>
       <Nav />
       <Switch>
-        {/* TODO: if we're logged in home goes to either profile or login lol */}
-        <Route exact path="/" render={() => <Redirect to="/login" />} />
+        <Route exact path="/" render={() => <Redirect to="/profile" />} />
 
         <Route exact path="/profile" component={Profile} />
         <Route exact path="/login" component={LoginForm} />
-        {/* <Route component={NotFound} /> */}
+        <Route component={NotFound} />
       </Switch>
     </Fragment>
   )
