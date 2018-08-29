@@ -15,6 +15,7 @@ class LoginForm extends React.Component {
   }
 
   render() {
+    // TODO: redirect to profile fi we r logged in
     return (
       <Segment>
         <Form
@@ -49,11 +50,16 @@ class LoginForm extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   authenticatingUser: state.usersReducer.authenticatingUser,
   failedLogin: state.usersReducer.failedLogin,
   loginError: state.usersReducer.error,
   user: state.usersReducer.username
 })
 
-export default withRouter(connect(mapStateToProps, { loginUser })(LoginForm))
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { loginUser }
+  )(LoginForm)
+)
