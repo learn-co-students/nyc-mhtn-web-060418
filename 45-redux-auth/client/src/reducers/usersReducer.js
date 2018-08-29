@@ -6,7 +6,7 @@ const defaultState = {
   error: null
 }
 
-const usersReducer = (state = defaultState, action) => {
+const usersReducer = (state=defaultState, action) => {
   switch (action.type) {
     case 'SET_CURRENT_USER':
       //action.payload {username: 'Chandler Bing', bio: 'my user bio', avatar: 'some image url'}
