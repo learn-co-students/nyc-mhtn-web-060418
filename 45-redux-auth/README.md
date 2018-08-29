@@ -48,7 +48,7 @@
 => {"beef"=>"steak"}
 ```
 
-* Building this functionality into our `application_controller.rb`. Given that many different controllers will need to authenticate and authorize users––`AuthController`, `UsersController`, etc––it makes sense to lift the functionality of encoding/decoding tokens to our top level `ApplicationController`. Recall that **all** controllers inherit from `ApplicationController`
+* Building this functionality into our [`ApplicationController`](/45-redux-auth/server/app/controllers/application_controller.rb). Given that many different controllers will need to authenticate and authorize users––[`AuthController`](/45-redux-auth/server/app/controllers/api/v1/auth_controller.rb), [`UsersController`](/45-redux-auth/server/app/controllers/api/v1/users_controller.rb), etc––it makes sense to lift the functionality of encoding/decoding tokens to our top level [`ApplicationController`](/45-redux-auth/server/app/controllers/application_controller.rb). Recall that **all** controllers inherit from `ApplicationController`
 
 ```ruby
 class ApplicationController < ActionController::API
