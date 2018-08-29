@@ -28,7 +28,7 @@
 
 ### Encoding and Decoding JWTs
 
-* Add `gem 'jwt'` to your Gemfile
+* Add `gem 'jwt'` to your [Gemfile](/server/Gemfile)
 * After calling `bundle install` we can see some of the functionality by opening a `rails console`
   * `JWT.encode` takes up to three arguments: a payload to encode, an application secret of the user's choice, and an optional third that can be used to specify the hashing algorithm used. Typically, we don't need to show the third. This returns a JWT as a string.
   * `JWT.decode` takes three arguments as well: a JWT as a string, an applicatin secret, and optionally a hashing algorithm.
