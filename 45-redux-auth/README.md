@@ -2,7 +2,7 @@
 
 ## Part 1: R A I L S
 
-* Token-based authentication is stateless. We are not storing any information about a logged in user on the server (which also means we don't need a model or table for our user sessions). No stored information means your applicaiton can scale and add more machines as necessary without worrying about where a user is logged in.
+* Token-based authentication is stateless. We are not storing any information about a logged in user on the server (which also means we don't need a model or table for our user sessions). No stored information means your application can scale and add more machines as necessary without worrying about where a user is logged in.
 
 * Here is the JWT authentication flow for logging in:
   1. An already existing user requests access with their username and password
