@@ -4,11 +4,18 @@
 
 * Token-based authentication is stateless. We are not storing any information about a logged in user on the server (which also means we don't need a model or table for our user sessions). No stored information means your application can scale and add more machines as necessary without worrying about where a user is logged in.
 
+---
+
+### JWT Auth Flow:
+
+![](https://cdn2.auth0.com/docs/media/articles/api-auth/client-credentials-grant.png)
+
 * Here is the JWT authentication flow for logging in:
   1. An already existing user requests access with their username and password
   2. The app validates these credentials
   3. The app gives a signed token to the client
   4. The client stores the token and presents it with every request. This token is effectively the user's access pass––it proves to our server that they are who they claim to be.
+
 
 * JWTs are composed of three strings separated by periods:
 
@@ -26,6 +33,8 @@
 
   <img width="750" alt="JWTs" src="https://cloud.githubusercontent.com/assets/25366/9151601/2e3baf1a-3dbc-11e5-90f6-b22cda07a077.png">
 
+---
+
 ### Encoding and Decoding JWTs
 
 * Add `gem 'jwt'` to your [Gemfile](/45-redux-auth/server/Gemfile)
@@ -38,7 +47,6 @@
 >  payload = { beef: 'steak' }
 
 > jwt = JWT.encode(payload, 'boeuf')
-
 => "eyJhbGciOiJIUzI1NiJ9.eyJiZWVmIjoic3RlYWsifQ._IBTHTLGX35ZJWTCcY30tLmwU9arwdpNVxtVU0NpAuI"
 
 > decoded_hash = JWT.decode(jwt, 'boeuf')
@@ -109,25 +117,27 @@ end
   * Can we call `.authenticate` on `nil`? NO!! `NoMethodError (undefined method 'authenticate' for nil:NilClass)`
   * Ruby, however is **lazy**. If Ruby encounters `&&`, both sides of the statement must evaluate to true. If the statement on the left side evaluates to false, Ruby will **not even look at the statement on the right**. Let's see an example:
 
-  ```ruby
-  true && true
-  #=> true
+```ruby
+true && true
+#=> true
 
-  true && false
-  #=> false
+true && false
+#=> false
 
-  false && not_a_variable
-  #=> false
+false && not_a_variable
+#=> false
 
-  true && not_a_variable
-  #=>NameError (undefined local variable or method `not_a_variable' for main:Object)
-  ```
+true && not_a_variable
+#=>NameError (undefined local variable or method `not_a_variable' for main:Object)
+```
   * Let's take another look at our previous example:
+
 ```ruby
 user = User.find_by(username: params[:username])
 if !!user && user.authenticate(params[:password])
 end
 ```
+
   * If `user` is `nil`, then `!!nil` will evaluate to `false` and **ruby will not even attempt to call .authenticate on user**. Without this catch, we will get a `NoMethodError (undefined method 'authenticate' for nil:NilClass)`.
 
 
@@ -143,15 +153,15 @@ end
 
 * The corresponding `fetch` request might look like this:
 
-  ```javascript
-  fetch('http://localhost:3000/api/v1/profile', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'Application/json',
-      'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-    }
-  })
-  ```
+```javascript
+fetch('http://localhost:3000/api/v1/profile', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'Application/json',
+    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+  }
+})
+```
 
 ---
 
