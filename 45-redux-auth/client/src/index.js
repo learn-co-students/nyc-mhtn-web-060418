@@ -6,7 +6,8 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
 
-import './index.css'
+import 'semantic-ui-css/semantic.min.css'
+
 import App from './App'
 import usersReducer from './reducers/usersReducer'
 import registerServiceWorker from './registerServiceWorker'
@@ -14,8 +15,6 @@ import registerServiceWorker from './registerServiceWorker'
 const rootReducer = combineReducers({ usersReducer })
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)))
-
-console.log('Redux store state: ', store.getState())
 
 ReactDOM.render(
   <Provider store={store}>
