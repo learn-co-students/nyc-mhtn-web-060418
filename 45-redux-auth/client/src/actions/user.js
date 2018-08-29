@@ -27,7 +27,7 @@ export const fetchCurrentUser = () => {
       }
     })
       .then(response => response.json())
-      .then(userData => dispatch(setCurrentUser(userData)))
+      .then(user => dispatch(setCurrentUser(user)))
   }
 }
 
