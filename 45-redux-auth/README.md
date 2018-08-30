@@ -483,6 +483,8 @@ end
 
 - Try creating a new user again with either [postman](https://www.getpostman.com/apps) or fetch and confirm that your server successfully issues a token on signup.
 
+![sign me up gif](https://media.giphy.com/media/xUOrw5LIxb8S9X1LGg/giphy.gif)
+
 ---
 
 #### Implementing Login
