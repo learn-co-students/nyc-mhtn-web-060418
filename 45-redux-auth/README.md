@@ -67,9 +67,9 @@
 
 ---
 
-### Building this functionality into our [`ApplicationController`](/45-redux-auth/server/app/controllers/application_controller.rb)
+### Building this functionality into our [`ApplicationController`][application_controller]
 
-* Given that many different controllers will need to authenticate and authorize users––[`AuthController`](/45-redux-auth/server/app/controllers/api/v1/auth_controller.rb), [`UsersController`](/45-redux-auth/server/app/controllers/api/v1/users_controller.rb), etc––it makes sense to lift the functionality of encoding/decoding tokens to our top level [`ApplicationController`](/45-redux-auth/server/app/controllers/application_controller.rb). Recall that **all** controllers inherit from `ApplicationController`
+* Given that many different controllers will need to authenticate and authorize users––[`AuthController`][auth_controller], [`UsersController`][users_controller], etc––it makes sense to lift the functionality of encoding/decoding tokens to our top level [`ApplicationController`][application_controller]. Recall that **all** controllers inherit from `ApplicationController`
 
 ```ruby
 class ApplicationController < ActionController::API
@@ -233,7 +233,8 @@ class ApplicationController < ActionController::API
 
   def decoded_token
     if auth_header
-      token = auth_header.split(' ')[1] # header: {'Authorization': 'Bearer JWTTOKEN'}
+      token = auth_header.split(' ')[1]
+      # header: { 'Authorization': 'Bearer JWTTOKEN' }
       begin
         JWT.decode(token, 'my_s3cr3t', true, algorithm: 'HS256')
       rescue JWT::DecodeError
@@ -267,7 +268,7 @@ end
 
 
 
-   It also means we need to add the following to our [`AuthController`](/45-redux-auth/server/app/controllers/api/v1/auth_controller.rb):
+   It also means we need to add the following to our [`AuthController`][auth_controller]:
 
 ```ruby
 class Api::V1::AuthController < ApplicationController
@@ -351,3 +352,9 @@ end
 - [Figaro Gem for hiding secrets in your app](https://github.com/laserlemon/figaro#getting-started)
 - [Ruby Begin Rescue Documentation](https://ruby-doc.org/core-2.2.0/doc/syntax/exceptions_rdoc.html)
 - [HTTP Status Rappers](http://httpstatusrappers.com)
+
+
+<!-- Markdown Variables -->
+[application_controller]: /45-redux-auth/server/app/controllers/application_controller.rb
+[auth_controller]: /45-redux-auth/server/app/controllers/api/v1/auth_controller.rb
+[users_controller]: /45-redux-auth/server/app/controllers/api/v1/users_controller.rb
