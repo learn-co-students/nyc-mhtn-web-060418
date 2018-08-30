@@ -8,15 +8,15 @@
 
 #### Creating our Server
 
-* This section will walk through building a rails server. If you have questions about `Cors`, `ActiveModel::Serializer`, `Postgres`, namespacing and versioning our API, and/or general questions about Rails as an api only, refer [to this guide](https://github.com/learn-co-curriculum/mod3-project-week-setup-example).
+- This section will walk through building a rails server. If you have questions about `Cors`, `ActiveModel::Serializer`, `Postgres`, namespacing and versioning our API, and/or general questions about Rails as an api only, refer [to this guide](https://github.com/learn-co-curriculum/mod3-project-week-setup-example).
 
-* Let's create our app with `rails new server --api --database=postgresql`
+- Let's create our app with `rails new server --api --database=postgresql`
 
-* We're going to need a few gems in our [Gemfile][gemfile] so let's go ahead and add them: `bundle add jwt && bundle add active_model_serializers && bundle add faker`––if you get a gem not found error, try running gem install on each of these, or manually add them to your [Gemfile][gemfile].
+- We're going to need a few gems in our [Gemfile][gemfile] so let's go ahead and add them: `bundle add jwt && bundle add active_model_serializers && bundle add faker`––if you get a gem not found error, try running gem install on each of these, or manually add them to your [Gemfile][gemfile].
 
-* Don't forget to uncomment `rack-cors` and `bcrypt` from your [Gemfile][gemfile].
+- Don't forget to uncomment `rack-cors` and `bcrypt` from your [Gemfile][gemfile].
 
-* Call `bundle install`. Your gemfile should look something like this:
+- Call `bundle install`. Your gemfile should look something like this:
 
 ```ruby
 source 'https://rubygems.org'
@@ -71,10 +71,9 @@ gem "jwt", "~> 2.1"
 gem "active_model_serializers", "~> 0.10.7"
 
 gem "faker", "~> 1.9"
-
 ```
 
-* Don't forget to enable CORS in your app. Uncomment the following in [`config/initializers/cors.rb`](/45-redux-auth/server/config/initializers/cors.rb). Don't forget to change the origins from `example.com` to `*`:
+- Don't forget to enable CORS in your app. Uncomment the following in [`config/initializers/cors.rb`](/45-redux-auth/server/config/initializers/cors.rb). Don't forget to change the origins from `example.com` to `*`:
 
 ```ruby
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
@@ -88,19 +87,20 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
 end
 ```
 
-* You can refer to the [rack-cors gem](https://github.com/cyu/rack-cors) if you're curious about [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
-* **Please don't forget to change these settings before deploying your app to the internet. Please**
+- You can refer to the [rack-cors gem](https://github.com/cyu/rack-cors) if you're curious about [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+- **Please don't forget to change these settings before deploying your app to the internet. Please**
 
 ---
 
 #### Creating Users
 
-* Run
-  * `rails g model User username password_digest bio avatar`
-  * `rails g controller api/v1/users`
-  * `rails db:migrate`
+- Run
 
-* Add `has_secure_password` to [`app/models/user.rb`](/45-redux-auth/server/app/models/user.rb). Recall that `has_secure_password` comes from [bcrypt](https://github.com/codahale/bcrypt-ruby):
+  - `rails g model User username password_digest bio avatar`
+  - `rails g controller api/v1/users`
+  - `rails db:migrate`
+
+- Add `has_secure_password` to [`app/models/user.rb`](/45-redux-auth/server/app/models/user.rb). Recall that `has_secure_password` comes from [bcrypt](https://github.com/codahale/bcrypt-ruby):
 
 ```ruby
 class User < ApplicationRecord
@@ -108,7 +108,7 @@ class User < ApplicationRecord
 end
 ```
 
-* Let's add a create method to our [`UsersController`][users_controller]:
+- Let's add a create method to our [`UsersController`][users_controller]:
 
 ```ruby
 class Api::V1::UsersController < ApplicationController
@@ -130,7 +130,7 @@ end
 
 ---
 
-* Next let's add the routes we'll need for our server. In [`config/routes.rb`](/45-redux-auth/server/config/routes.rb):
+- Next let's add the routes we'll need for our server. In [`config/routes.rb`](/45-redux-auth/server/config/routes.rb):
 
 ```ruby
 Rails.application.routes.draw do
@@ -146,24 +146,26 @@ end
 
 ---
 
-* Take some time to test this either in [Postman](https://www.getpostman.com/apps) or with JavaScript fetch:
+- Take some time to test this either in [Postman](https://www.getpostman.com/apps) or with JavaScript fetch:
 
 ```javascript
 fetch('http://localhost:3000/api/v1/users', {
-	method: 'POST',
-	headers: {
-		'Content-Type': 'application/json',
-		'Accept': 'application/json'
-	},
-	body: JSON.stringify({
-		user: {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json'
+  },
+  body: JSON.stringify({
+    user: {
       username: 'guy',
       password: 'hi',
       bio: 'King of Flavortown, USA',
       avatar: 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Guy_Fieri_at_Guantanamo_2.jpg'
     }
-	})
-}).then(r => r.json()).then(console.log)
+  })
+})
+  .then(r => r.json())
+  .then(console.log)
 ```
 
 ---
@@ -178,7 +180,7 @@ fetch('http://localhost:3000/api/v1/users', {
 
 ---
 
-* Token-based authentication is **stateless**. _We are not storing any information about a logged in user on the server_ (which also means we don't need a model or table for our user sessions). No stored information means your application can scale and add more machines as necessary without worrying about where a user is logged in. Instead, the client (browser) stores a token and sends that token along with every request. Instead of storing a plaintext username, or user_id, we can encode user data with JSON Web Tokens (JWT) and store that encoded token client side.
+- Token-based authentication is **stateless**. _We are not storing any information about a logged in user on the server_ (which also means we don't need a model or table for our user sessions). No stored information means your application can scale and add more machines as necessary without worrying about where a user is logged in. Instead, the client (browser) stores a token and sends that token along with every request. Instead of storing a plaintext username, or user_id, we can encode user data with JSON Web Tokens (JWT) and store that encoded token client side.
 
 ---
 
@@ -186,12 +188,11 @@ fetch('http://localhost:3000/api/v1/users', {
 
 ![](https://i.stack.imgur.com/f2ZhM.png)
 
-* Here is the JWT authentication flow for logging in:
-  1. An already existing user requests access with their username and password
-  2. The app validates these credentials
-  3. The app gives a signed token to the client
-  4. The client stores the token and presents it with every request. This token is effectively the user's access pass––it proves to our server that they are who they claim to be.
-
+- Here is the JWT authentication flow for logging in:
+  1.  An already existing user requests access with their username and password
+  2.  The app validates these credentials
+  3.  The app gives a signed token to the client
+  4.  The client stores the token and presents it with every request. This token is effectively the user's access pass––it proves to our server that they are who they claim to be.
 
 * JWTs are composed of three strings separated by periods:
 
@@ -199,13 +200,13 @@ fetch('http://localhost:3000/api/v1/users', {
   aaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccc
   ```
 
-  * The first part (aaaaaaaaaaaa) is the header
+  - The first part (aaaaaaaaaaaa) is the header
 
-  * The second part (bbbbbbbbbbbb) is the payload - the good stuff, like who this person is, and their id in our database.
+  - The second part (bbbbbbbbbbbb) is the payload - the good stuff, like who this person is, and their id in our database.
 
-  * The third part (ccccccccccccc) is the signature. The signature is a hash of the header and the payload. It is hashed with a secret key, that we will provide (and should store in an environment variable using a gem like [Figaro](https://github.com/laserlemon/figaro#getting-started))
+  - The third part (ccccccccccccc) is the signature. The signature is a hash of the header and the payload. It is hashed with a secret key, that we will provide (and should store in an environment variable using a gem like [Figaro](https://github.com/laserlemon/figaro#getting-started))
 
-  * Head on over to [jwt.io](http://jwt.io/#debugger) and see what I mean:
+  - Head on over to [jwt.io](http://jwt.io/#debugger) and see what I mean:
 
   <img width="750" alt="JWTs" src="https://cloud.githubusercontent.com/assets/25366/9151601/2e3baf1a-3dbc-11e5-90f6-b22cda07a077.png">
 
@@ -213,10 +214,10 @@ fetch('http://localhost:3000/api/v1/users', {
 
 ### Encoding and Decoding JWTs
 
-* Add [`gem 'jwt'`](https://github.com/jwt/ruby-jwt) to your [Gemfile][gemfile]
-* After calling `bundle install` we can explore some JWT methods by opening a `rails console`
-  * `JWT.encode` takes up to three arguments: a payload to encode, an application secret of the user's choice, and an optional third that can be used to specify the hashing algorithm used. Typically, we don't need to show the third. This returns a JWT as a string.
-  * `JWT.decode` takes three arguments as well: a JWT as a string, an application secret, and optionally a hashing algorithm.
+- Add [`gem 'jwt'`](https://github.com/jwt/ruby-jwt) to your [Gemfile][gemfile]
+- After calling `bundle install` we can explore some JWT methods by opening a `rails console`
+  - `JWT.encode` takes up to three arguments: a payload to encode, an application secret of the user's choice, and an optional third that can be used to specify the hashing algorithm used. Typically, we don't need to show the third. This returns a JWT as a string.
+  - `JWT.decode` takes three arguments as well: a JWT as a string, an application secret, and optionally a hashing algorithm.
 
 ```ruby
 #in rails console
@@ -236,7 +237,7 @@ fetch('http://localhost:3000/api/v1/users', {
 
 ### Building this functionality into our [`ApplicationController`][application_controller]
 
-* Given that many different controllers will need to authenticate and authorize users––[`AuthController`][auth_controller], [`UsersController`][users_controller], etc––it makes sense to lift the functionality of encoding/decoding tokens to our top level [`ApplicationController`][application_controller]. Recall that **all** controllers inherit from `ApplicationController`
+- Given that many different controllers will need to authenticate and authorize users––[`AuthController`][auth_controller], [`UsersController`][users_controller], etc––it makes sense to lift the functionality of encoding/decoding tokens to our top level [`ApplicationController`][application_controller]. Recall that **all** controllers inherit from `ApplicationController`
 
 ```ruby
 class ApplicationController < ActionController::API
@@ -257,27 +258,28 @@ end
 ```
 
 ---
-* [According to the JWT Documentation](https://jwt.io/introduction/):
+
+- [According to the JWT Documentation](https://jwt.io/introduction/):
   Whenever the user wants to access a protected route or resource, the user agent (browser in our case) should send the JWT, typically in the Authorization header using the Bearer schema. The content of the header should look like the following:
 
   `Authorization: Bearer <token>`
 
 ---
 
-* The corresponding `fetch` request might look like this:
+- The corresponding `fetch` request might look like this:
 
 ```javascript
 fetch('http://localhost:3000/api/v1/profile', {
   method: 'GET',
   headers: {
-    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+    Authorization: `Bearer ${localStorage.getItem('jwt')}`
   }
 })
 ```
 
 ---
 
-* Knowing this, we can setup our server to anticipate a JWT sent along in request headers:
+- Knowing this, we can setup our server to anticipate a JWT sent along in request headers:
 
 ```ruby
 class ApplicationController < ActionController::API
@@ -307,8 +309,9 @@ class ApplicationController < ActionController::API
 ```
 
 ---
-* A few things to note about the code above:
-  * The [`Begin/Rescue` syntax](https://ruby-doc.org/core-2.2.0/doc/syntax/exceptions_rdoc.html) allows us to **rescue** out of an exception in Ruby. Let's see an example in a `rails console`. In the event our server receives and attempts to decode an **invalid token**:
+
+- A few things to note about the code above:
+  - The [`Begin/Rescue` syntax](https://ruby-doc.org/core-2.2.0/doc/syntax/exceptions_rdoc.html) allows us to **rescue** out of an exception in Ruby. Let's see an example in a `rails console`. In the event our server receives and attempts to decode an **invalid token**:
 
 ```ruby
 # in rails console
@@ -321,7 +324,7 @@ Traceback (most recent call last):
 JWT::DecodeError (Invalid segment encoding)
 ```
 
-* In other words, if our server receives a bad token, this will raise an exception causing a [500 Internal Server Error](http://httpstatusrappers.com/500.html). We can account for this by **rescuing out of this exception**:
+- In other words, if our server receives a bad token, this will raise an exception causing a [500 Internal Server Error](http://httpstatusrappers.com/500.html). We can account for this by **rescuing out of this exception**:
 
 ```ruby
 # in rails console
@@ -334,11 +337,11 @@ JWT::DecodeError (Invalid segment encoding)
  => nil
 ```
 
-* Instead of crashing our server, we simply return `nil` and keep trucking along.
+- Instead of crashing our server, we simply return `nil` and keep trucking along.
 
 ---
 
-* We can then complete our controller by automatically obtaining the user whenever an authorization header is present:
+- We can then complete our controller by automatically obtaining the user whenever an authorization header is present:
 
 ```ruby
 class ApplicationController < ActionController::API
@@ -377,11 +380,11 @@ class ApplicationController < ActionController::API
 end
 ```
 
-* Recall that a Ruby object/instance is 'truthy' so `!!user_instance #=> true` and nil is 'falsey': `!!nil #=> false`. Therefore `logged_in?` will just return a boolean depending on what our `current_user` method returns.
+- Recall that a Ruby object/instance is 'truthy' so `!!user_instance #=> true` and nil is 'falsey': `!!nil #=> false`. Therefore `logged_in?` will just return a boolean depending on what our `current_user` method returns.
 
 ---
 
-* Finally, let's lock down our application to prevent unauthorized access:
+- Finally, let's lock down our application to prevent unauthorized access:
 
 ```ruby
 class ApplicationController < ActionController::API
@@ -424,17 +427,16 @@ class ApplicationController < ActionController::API
     render json: { message: 'Please log in' }, status: :unauthorized unless logged_in?
   end
 end
-
 ```
 
-* A few things to note about the code above:
-  * `before_action :authorized` will call the authorized method **before anything else happens in our app**. This will effectively lock down the entire application. Next we'll augment our [`UsersController`][users_controller] and build our [`AuthController`][auth_controller] to allow signup/login.
+- A few things to note about the code above:
+  - `before_action :authorized` will call the authorized method **before anything else happens in our app**. This will effectively lock down the entire application. Next we'll augment our [`UsersController`][users_controller] and build our [`AuthController`][auth_controller] to allow signup/login.
 
 ---
 
 #### Updating the [UsersController][users_controller]
 
-* Let's update the [UsersController][users_controller] so that it issues a token when users register for our app:
+- Let's update the [UsersController][users_controller] so that it issues a token when users register for our app:
 
 ```ruby
 class Api::V1::UsersController < ApplicationController
@@ -456,9 +458,9 @@ class Api::V1::UsersController < ApplicationController
     params.require(:user).permit(:username, :password, :bio, :avatar)
   end
 end
-
 ```
-* We need to make sure to skip the `before_action :authorized` coming from [ApplicationController][application_controller]
+
+- We need to make sure to skip the `before_action :authorized` coming from [ApplicationController][application_controller]
 
 ```ruby
 class Api::V1::UsersController < ApplicationController
@@ -466,17 +468,17 @@ class Api::V1::UsersController < ApplicationController
 end
 ```
 
-* It wouldn't make sense to ask our users to be logged in before they create an account. This circular logic will make it impossible for users to authenticate into the app. How can a user create an account if our app asks them to be logged in or `authorized` before doing so? Skipping the before action 'unlocks' this portion of our app.
+- It wouldn't make sense to ask our users to be logged in before they create an account. This circular logic will make it impossible for users to authenticate into the app. How can a user create an account if our app asks them to be logged in or `authorized` before doing so? Skipping the before action 'unlocks' this portion of our app.
 
-* Try creating a new user again with either [postman](https://www.getpostman.com/apps) or fetch and confirm that your server successfully issues a token on signup.
+- Try creating a new user again with either [postman](https://www.getpostman.com/apps) or fetch and confirm that your server successfully issues a token on signup.
 
 ---
 
 #### Implementing Login
 
-* A token should be issued in two different controller actions: `users#create` and `auth#create`. Think about what each of these methods correspond to––**a user signing up for our app for the first time** and **an already existing user logging back in**. In both cases, we need to issue new tokens for our users.
+- A token should be issued in two different controller actions: `users#create` and `auth#create`. Think about what each of these methods correspond to––**a user signing up for our app for the first time** and **an already existing user logging back in**. In both cases, we need to issue new tokens for our users.
 
-* We'll need to create a new controller to handle login: `rails g controller api/v1/auth` and let's add the following to our [AuthController][auth_controller]:
+- We'll need to create a new controller to handle login: `rails g controller api/v1/auth` and let's add the following to our [AuthController][auth_controller]:
 
 ```ruby
 class Api::V1::AuthController < ApplicationController
@@ -500,16 +502,15 @@ class Api::V1::AuthController < ApplicationController
     params.require(:user).permit(:username, :password)
   end
 end
-
 ```
 
-* We can simply call our `issue_token` method, passing the found/created user's ID in a payload. The newly created JWT can then be passed back along with the user's data. The user data can be stored in our application's state, while the token can be stored in `localStorage`––more on this later.
+- We can simply call our `issue_token` method, passing the found/created user's ID in a payload. The newly created JWT can then be passed back along with the user's data. The user data can be stored in our application's state, while the token can be stored in `localStorage`––more on this later.
 
-* A few things to keep in mind about the code above:
-  * `User.find_by({ name: 'Chandler Bing' })` will either return a user instance if that user can be found in the database **OR** it will return `nil` if that user is not found.
-  * In the event that the user is not found, `user = User.find_by(username: params[:username])` will evaluate to `nil`.
-  * Can we call `.authenticate` on `nil`? NO!! `NoMethodError (undefined method 'authenticate' for nil:NilClass)`
-  * Ruby, however is **lazy**. If Ruby encounters `&&`, both sides of the statement must evaluate to true. If the statement on the left side evaluates to false, Ruby will **not even look at the statement on the right**. Let's see an example:
+- A few things to keep in mind about the code above:
+  - `User.find_by({ name: 'Chandler Bing' })` will either return a user instance if that user can be found in the database **OR** it will return `nil` if that user is not found.
+  - In the event that the user is not found, `user = User.find_by(username: params[:username])` will evaluate to `nil`.
+  - Can we call `.authenticate` on `nil`? NO!! `NoMethodError (undefined method 'authenticate' for nil:NilClass)`
+  - Ruby, however is **lazy**. If Ruby encounters `&&`, both sides of the statement must evaluate to true. If the statement on the left side evaluates to false, Ruby will **not even look at the statement on the right**. Let's see an example:
 
 ```ruby
 true && true
@@ -524,7 +525,8 @@ false && not_a_variable
 true && not_a_variable
 #=>NameError (undefined local variable or method `not_a_variable' for main:Object)
 ```
-  * Let's take another look at our previous example:
+
+- Let's take another look at our previous example:
 
 ```ruby
 @user = User.find_by(username: params[:username])
@@ -532,11 +534,12 @@ if @user && @user.authenticate(params[:password])
 end
 ```
 
-  * If `user` is `nil`, then `!!nil` will evaluate to `false` and **ruby will not even attempt to call .authenticate on user**. Without this catch, we will get a `NoMethodError (undefined method 'authenticate' for nil:NilClass)`.
+- If `user` is `nil`, then `!!nil` will evaluate to `false` and **ruby will not even attempt to call .authenticate on user**. Without this catch, we will get a `NoMethodError (undefined method 'authenticate' for nil:NilClass)`.
 
 ---
 
 ### External Resources
+
 - [Mod3 API Setup Guide](https://github.com/learn-co-curriculum/mod3-project-week-setup-example)
 - [rack-cors gem](https://github.com/cyu/rack-cors)
 - [MDN article on CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
@@ -548,8 +551,8 @@ end
 - [Ruby Begin Rescue Documentation](https://ruby-doc.org/core-2.2.0/doc/syntax/exceptions_rdoc.html)
 - [HTTP Status Rappers](http://httpstatusrappers.com)
 
-
 <!-- Markdown Variables -->
+
 [gemfile]: /45-redux-auth/server/Gemfile
 [application_controller]: /45-redux-auth/server/app/controllers/application_controller.rb
 [auth_controller]: /45-redux-auth/server/app/controllers/api/v1/auth_controller.rb
