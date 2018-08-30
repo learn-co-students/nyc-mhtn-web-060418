@@ -176,7 +176,7 @@ fetch('http://localhost:3000/api/v1/users', {
 
 ---
 
-* Token-based authentication is **stateless**. _We are not storing any information about a logged in user on the server_ (which also means we don't need a model or table for our user sessions). No stored information means your application can scale and add more machines as necessary without worrying about where a user is logged in. Instead, the client (browser) stores a token and sends that token along with every request. Instead of storing a plaintext username, or user_id, we can encrypt user data with JSON Web Tokens (JWT) and store that encrypted token client side.
+* Token-based authentication is **stateless**. _We are not storing any information about a logged in user on the server_ (which also means we don't need a model or table for our user sessions). No stored information means your application can scale and add more machines as necessary without worrying about where a user is logged in. Instead, the client (browser) stores a token and sends that token along with every request. Instead of storing a plaintext username, or user_id, we can encode user data with JSON Web Tokens (JWT) and store that encoded token client side.
 
 ---
 
