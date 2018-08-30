@@ -211,7 +211,7 @@ class ApplicationController < ActionController::API
 end
 ```
 
-* Recall that a Ruby object/instance is 'truthy' so `!!user_instance #=> true` and nil is 'falsey': `!!nil #=> false`. Therefore `logged_in?` will just return a boolean depending on whether or not we have a current user.
+* Recall that a Ruby object/instance is 'truthy' so `!!user_instance #=> true` and nil is 'falsey': `!!nil #=> false`. Therefore `logged_in?` will just return a boolean depending on what our `current_user` method returns.
 
 ---
 
