@@ -566,6 +566,7 @@ end
 - [Figaro Gem for hiding secrets in your app](https://github.com/laserlemon/figaro#getting-started)
 - [Ruby Begin Rescue Documentation](https://ruby-doc.org/core-2.2.0/doc/syntax/exceptions_rdoc.html)
 - [HTTP Status Rappers](http://httpstatusrappers.com)
+- [Rails Status Code Symbols Cheat Sheet](https://gist.github.com/mlanett/a31c340b132ddefa9cca)
 
 <!-- Markdown Variables -->
 
