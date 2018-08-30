@@ -1,4 +1,4 @@
 class User < ApplicationRecord
-  has_secure_password #=> gives me User#authenticate(plaintext_password) method
+  has_secure_password
   validates :username, uniqueness: { case_sensitive: false }
 end

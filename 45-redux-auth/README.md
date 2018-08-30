@@ -491,7 +491,7 @@ end
 
 - A token should be issued in two different controller actions: [`UsersController#create`][users_controller] and [`AuthController#create`][auth_controller]. Think about what each of these methods correspond to––**a user signing up for our app for the first time** and **an already existing user logging back in**. In both cases, we need to issue new tokens for our users.
 
-- We'll need to create a new controller to handle login: `rails g controller api/v1/auth` and let's add the following to our [AuthController][auth_controller]:
+- We'll need to create a new controller to handle login: `rails g controller api/v1/auth` and let's add the following to this [AuthController][auth_controller]:
 
 ```ruby
 class Api::V1::AuthController < ApplicationController
@@ -499,10 +499,11 @@ class Api::V1::AuthController < ApplicationController
 
   def create
     @user = User.find_by(username: user_login_params[:username])
+    #User#authenticate comes from BCrypt
     if @user && @user.authenticate(user_login_params[:password])
-      # encode token comes from application controller
+      # encode token comes from ApplicationController
       token = encode_token(user_id: @user.id)
-      render json: { user: UserSerializer.new(@user), jwt: token }, status: :created
+      render json: { user: UserSerializer.new(@user), jwt: token }, status: :accepted
     else
       render json: { message: 'Invalid username or password' }, status: :unauthorized
     end
@@ -511,7 +512,7 @@ class Api::V1::AuthController < ApplicationController
   private
 
   def user_login_params
-    # params {user: {username: 'Chandler Bing', password: 'hi' }}
+    # params { user: {username: 'Chandler Bing', password: 'hi' } }
     params.require(:user).permit(:username, :password)
   end
 end
