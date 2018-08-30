@@ -489,7 +489,7 @@ end
 
 #### Implementing Login
 
-- A token should be issued in two different controller actions: `users#create` and `auth#create`. Think about what each of these methods correspond to––**a user signing up for our app for the first time** and **an already existing user logging back in**. In both cases, we need to issue new tokens for our users.
+- A token should be issued in two different controller actions: [`UsersController#create`][users_controller] and [`AuthController#create`][auth_controller]. Think about what each of these methods correspond to––**a user signing up for our app for the first time** and **an already existing user logging back in**. In both cases, we need to issue new tokens for our users.
 
 - We'll need to create a new controller to handle login: `rails g controller api/v1/auth` and let's add the following to our [AuthController][auth_controller]:
 
