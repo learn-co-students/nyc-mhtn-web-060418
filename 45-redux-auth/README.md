@@ -74,7 +74,7 @@ gem "faker", "~> 1.9"
 
 ```
 
-* Don't forget to enable CORS in your app. Uncomment the following in [`config/initializers/cors.rb`](/45-redux-auth/server/config/initializers/cors.rb):
+* Don't forget to enable CORS in your app. Uncomment the following in [`config/initializers/cors.rb`](/45-redux-auth/server/config/initializers/cors.rb). Don't forget to change the origins from `example.com` to `*`:
 
 ```ruby
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
