@@ -6,6 +6,95 @@
 
 #### Creating our Server
 
+* This section will walk through building a rails server. If you have questions about `Cors`, `ActiveModel::Serializer`, `Postgres`, and general questions about Rails as an api only, refer [to this guide](https://github.com/learn-co-curriculum/mod3-project-week-setup-example).
+
+* Let's create our app with `rails new server --api --database=postgresql`
+
+* We're going to need a few gems in our [Gemfile][gemfile] so let's go ahead and add them: `bundle add jwt && bundle add active_model_serializers && bundle add faker`––if you get a gem not found error, try running gem install on each of these, or manually add them to your [Gemfile][gemfile].
+
+* Don't forget to uncomment `rack-cors` and `bcrypt` from your [Gemfile][gemfile].
+
+* Call `bundle install`. Your gemfile should look something like this:
+
+```ruby
+source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+ruby '2.5.1'
+
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '~> 5.2.1'
+# Use postgresql as the database for Active Record
+gem 'pg', '>= 0.18', '< 2.0'
+# Use Puma as the app server
+gem 'puma', '~> 3.11'
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+# gem 'jbuilder', '~> 2.5'
+# Use Redis adapter to run Action Cable in production
+# gem 'redis', '~> 4.0'
+# Use ActiveModel has_secure_password
+gem 'bcrypt', '~> 3.1.7'
+
+# Use ActiveStorage variant
+# gem 'mini_magick', '~> 4.8'
+
+# Use Capistrano for deployment
+# gem 'capistrano-rails', group: :development
+
+# Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', '>= 1.1.0', require: false
+
+# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
+gem 'rack-cors'
+
+
+group :development, :test do
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+end
+
+group :development do
+  gem 'listen', '>= 3.0.5', '< 3.2'
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
+  gem 'spring-watcher-listen', '~> 2.0.0'
+end
+
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem "jwt", "~> 2.1"
+
+gem "active_model_serializers", "~> 0.10.7"
+
+gem "faker", "~> 1.9"
+
+```
+
+* Don't forget to enable CORS in your app. Uncomment the following in [`config/initializers/cors.rb`](/config/initializers/cors.rb):
+
+```ruby
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    origins '*'
+
+    resource '*',
+      headers: :any,
+      methods: [:get, :post, :put, :patch, :delete, :options, :head]
+  end
+end
+```
+
+* You can refer to the [rack-cors gem](https://github.com/cyu/rack-cors) if you're curious about [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+* **Please don't forget to change these settings before deploying your app to the internet. Please**
+
+---
+
+#### Creating Users
+
+
+---
 
 #### Enter: JWT
 
@@ -46,7 +135,7 @@
 
 ### Encoding and Decoding JWTs
 
-* Add [`gem 'jwt'`](https://github.com/jwt/ruby-jwt) to your [Gemfile](/45-redux-auth/server/Gemfile)
+* Add [`gem 'jwt'`](https://github.com/jwt/ruby-jwt) to your [Gemfile][gemfile]
 * After calling `bundle install` we can explore some JWT methods by opening a `rails console`
   * `JWT.encode` takes up to three arguments: a payload to encode, an application secret of the user's choice, and an optional third that can be used to specify the hashing algorithm used. Typically, we don't need to show the third. This returns a JWT as a string.
   * `JWT.decode` takes three arguments as well: a JWT as a string, an application secret, and optionally a hashing algorithm.
@@ -261,11 +350,13 @@ end
 ```
 
 * A few things to note about the code above:
-  * `before_action :authorized` will call the authorized method **before anything else happens in our app**. This will effectively lock down the entire application. Next we'll build our `UsersController` and `AuthController` to allow signup/login.
+  * `before_action :authorized` will call the authorized method **before anything else happens in our app**. This will effectively lock down the entire application. Next we'll build our [`UsersController`][users_controller] and [`AuthController`][auth_controller] to allow signup/login.
 
 ---
 
+#### Building out User Login and Signup
 
+---
 
    It also means we need to add the following to our [`AuthController`][auth_controller]:
 
@@ -279,7 +370,7 @@ end
 
 ---
 
-### Integrating JWT into Auth Flow
+#### Integrating JWT into Auth Flow
 
 * A token should be issued in two different controller actions: `users#create` and `auth#create`. Think about what each of these methods correspond to––**a user signing up for our app for the first time** and **an already existing user logging back in**.
 
@@ -346,6 +437,9 @@ end
 ---
 
 ### External Resources
+- [Mod3 API Setup Guide](https://github.com/learn-co-curriculum/mod3-project-week-setup-example)
+- [rack-cors gem](https://github.com/cyu/rack-cors)
+- [MDN article on CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
 - [JWT Documentation](https://jwt.io/introduction/)
 - [JWT Ruby Gem on GitHub](https://github.com/jwt/ruby-jwt)
 - [Figaro Gem for hiding secrets in your app](https://github.com/laserlemon/figaro#getting-started)
@@ -354,6 +448,7 @@ end
 
 
 <!-- Markdown Variables -->
+[gemfile]: /45-redux-auth/server/Gemfile
 [application_controller]: /45-redux-auth/server/app/controllers/application_controller.rb
 [auth_controller]: /45-redux-auth/server/app/controllers/api/v1/auth_controller.rb
 [users_controller]: /45-redux-auth/server/app/controllers/api/v1/users_controller.rb
