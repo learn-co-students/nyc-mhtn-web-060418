@@ -1,12 +1,14 @@
 ### JWT Auth in Redux and Rails
 
+**This is a sample application and walks through _one_ possible auth implementation. Please do not blindly copy/paste the code here. Use this as a template for setting up token auth in a React/Redux application.**
+
 ---
 
 ## Part 1: R A I L S and Encoding BCrypt
 
 #### Creating our Server
 
-* This section will walk through building a rails server. If you have questions about `Cors`, `ActiveModel::Serializer`, `Postgres`, and general questions about Rails as an api only, refer [to this guide](https://github.com/learn-co-curriculum/mod3-project-week-setup-example).
+* This section will walk through building a rails server. If you have questions about `Cors`, `ActiveModel::Serializer`, `Postgres`, namespacing and versioning our API, and/or general questions about Rails as an api only, refer [to this guide](https://github.com/learn-co-curriculum/mod3-project-week-setup-example).
 
 * Let's create our app with `rails new server --api --database=postgresql`
 
@@ -72,7 +74,7 @@ gem "faker", "~> 1.9"
 
 ```
 
-* Don't forget to enable CORS in your app. Uncomment the following in [`config/initializers/cors.rb`](/config/initializers/cors.rb):
+* Don't forget to enable CORS in your app. Uncomment the following in [`config/initializers/cors.rb`](/45-redux-auth/server/config/initializers/cors.rb):
 
 ```ruby
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
@@ -93,6 +95,35 @@ end
 
 #### Creating Users
 
+* Run
+  * `rails g model User username password_digest bio avatar`
+  * `rails g controller api/v1/users`
+  * `rails db:migrate`
+
+* Add `has_secure_password` to [`app/models/user.rb`](/45-redux-auth/server/app/models/user.rb). Recall that `has_secure_password` comes from [bcrypt](https://github.com/codahale/bcrypt-ruby):
+
+```ruby
+class User < ApplicationRecord
+  has_secure_password
+end
+
+```
+
+---
+
+* Next let's add the routes we'll need for our server. In [`config/routes.rb`](/45-redux-auth/server/config/routes.rb):
+
+```ruby
+Rails.application.routes.draw do
+  namespace :api do
+    namespace :v1 do
+      resources :users, only: %i[create]
+      post '/login', to: 'auth#create'
+      get '/profile', to: 'users#profile'
+    end
+  end
+end
+```
 
 ---
 
@@ -440,6 +471,7 @@ end
 - [Mod3 API Setup Guide](https://github.com/learn-co-curriculum/mod3-project-week-setup-example)
 - [rack-cors gem](https://github.com/cyu/rack-cors)
 - [MDN article on CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+- [Bcrypt gem](https://github.com/codahale/bcrypt-ruby)
 - [JWT Documentation](https://jwt.io/introduction/)
 - [JWT Ruby Gem on GitHub](https://github.com/jwt/ruby-jwt)
 - [Figaro Gem for hiding secrets in your app](https://github.com/laserlemon/figaro#getting-started)
