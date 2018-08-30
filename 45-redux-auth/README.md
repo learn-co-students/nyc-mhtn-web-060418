@@ -98,6 +98,7 @@ end
 
   - `rails g model User username password_digest bio avatar`
   - `rails g controller api/v1/users`
+  - `rails g serializer user` (if you want to [use a serializer](https://www.sitepoint.com/active-model-serializers-rails-and-json-oh-my/))
   - `rails db:migrate`
 
 - Add `has_secure_password` to [`app/models/user.rb`](/45-redux-auth/server/app/models/user.rb). Recall that `has_secure_password` comes from [bcrypt](https://github.com/codahale/bcrypt-ruby):
@@ -125,6 +126,14 @@ class Api::V1::UsersController < ApplicationController
   def user_params
     params.require(:user).permit(:username, :password, :bio, :avatar)
   end
+end
+```
+
+- And update our [`UserSerializer`][user_serializer]:
+
+```ruby
+class UserSerializer < ActiveModel::Serializer
+  attributes :username, :avatar, :bio
 end
 ```
 
@@ -557,3 +566,4 @@ end
 [application_controller]: /45-redux-auth/server/app/controllers/application_controller.rb
 [auth_controller]: /45-redux-auth/server/app/controllers/api/v1/auth_controller.rb
 [users_controller]: /45-redux-auth/server/app/controllers/api/v1/users_controller.rb
+[user_serializer]: /45-redux-auth/server/app/serializers/user_serializer.rb
