@@ -421,7 +421,7 @@ class ApplicationController < ActionController::API
   end
 
   def authorized
-    render json: { message: 'Please log in' }, status: 401 unless logged_in?
+    render json: { message: 'Please log in' }, status: :unauthorized unless logged_in?
   end
 end
 
@@ -434,18 +434,17 @@ end
 
 #### Updating the [UsersController][users_controller]
 
+* Let's update the [UsersController][users_controller] so that it issues a token when users register for our app:
+
 ```ruby
 class Api::V1::UsersController < ApplicationController
   skip_before_action :authorized, only: [:create]
 
-  def profile
-    current_user ? (render json: UserSerializer.new(current_user), status: 200) : (render json: { message: 'User not found' }, status: 404)
-  end
-
   def create
     @user = User.create(user_params)
     if @user.valid?
-      render json: { user: @user }, status: :created
+      @token = encode_token(user_id: @user.id)
+      render json: { user: @user, jwt: @token }, status: :created
     else
       render json: { error: 'failed to create user' }, status: :not_acceptable
     end
@@ -463,48 +462,48 @@ end
 
 ```ruby
 class Api::V1::UsersController < ApplicationController
-  skip_before_action :authorized, only: [:create]
+  skip_before_action :authorized, only: %i[create]
 end
 ```
-  * It wouldn't make sense to ask our users to be logged in before they create an account. This circular logic will make it impossible for users to authenticate into the app.
-  * `User.find_by({ name: 'Chandler Bing' })` will either return `nil` or a ruby instance. Ruby instances are truthy in Ruby, `nil` is falsey. Therefore, `!!user_instance #=>true` and `!!nil #=>false`
+
+* It wouldn't make sense to ask our users to be logged in before they create an account. This circular logic will make it impossible for users to authenticate into the app. How can a user create an account if our app asks them to be logged in or `authorized` before doing so? Skipping the before action 'unlocks' this portion of our app.
+
+* Try creating a new user again with either [postman](https://www.getpostman.com/apps) or fetch and confirm that your server successfully issues a token on signup.
 
 ---
 
-#### Integrating JWT into Auth Flow
+#### Implementing Login
 
-* A token should be issued in two different controller actions: `users#create` and `auth#create`. Think about what each of these methods correspond to––**a user signing up for our app for the first time** and **an already existing user logging back in**.
+* A token should be issued in two different controller actions: `users#create` and `auth#create`. Think about what each of these methods correspond to––**a user signing up for our app for the first time** and **an already existing user logging back in**. In both cases, we need to issue new tokens for our users.
 
-* We can simply call our `issue_token` method, passing the found/created user's ID in a payload. The newly created JWT can then be passed back along with the user's data. The user data can be stored in our application's state, while the token can be stored in `localStorage`––more on this later.
+* We'll need to create a new controller to handle login: `rails g controller api/v1/auth` and let's add the following to our [AuthController][auth_controller]:
 
 ```ruby
-# auth_controller.rb
-def create
-  user = User.find_by(username: params[:username])
-  if !!user && user.authenticate(params[:password])
-    payload = {user_id: user.id}
-    token = issue_token(payload)
-    render json: { jwt: token, yay: true }
-  else
-    render json: { error: "You dun goofed!"}
+class Api::V1::AuthController < ApplicationController
+  skip_before_action :authorized, only: %i[create]
+
+  def create
+    @user = User.find_by(username: user_login_params[:username])
+    if @user && @user.authenticate(user_login_params[:password])
+      # encode token comes from application controller
+      token = encode_token(user_id: @user.id)
+      render json: { user: UserSerializer.new(@user), jwt: token }, status: :created
+    else
+      render json: { message: 'Invalid username or password' }, status: :unauthorized
+    end
+  end
+
+  private
+
+  def user_login_params
+    # params {user: {username: 'Chandler Bing', password: 'hi' }}
+    params.require(:user).permit(:username, :password)
   end
 end
-
-# users_controller.rb
-def create
-
-  user = User.create(username: params[:username], password: params[:password])
-  if user.valid?
-    payload = {user_id: user.id}
-    token = issue_token(payload)
-    render json: { jwt: token, yay: true }
-  else
-    render json: { error: "You dun goofed!"}
-  end
-end
-
 
 ```
+
+* We can simply call our `issue_token` method, passing the found/created user's ID in a payload. The newly created JWT can then be passed back along with the user's data. The user data can be stored in our application's state, while the token can be stored in `localStorage`––more on this later.
 
 * A few things to keep in mind about the code above:
   * `User.find_by({ name: 'Chandler Bing' })` will either return a user instance if that user can be found in the database **OR** it will return `nil` if that user is not found.
