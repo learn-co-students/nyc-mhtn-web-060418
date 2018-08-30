@@ -1,14 +1,23 @@
 ### JWT Auth in Redux and Rails
 
-## Part 1: R A I L S
+---
 
-* Token-based authentication is stateless. We are not storing any information about a logged in user on the server (which also means we don't need a model or table for our user sessions). No stored information means your application can scale and add more machines as necessary without worrying about where a user is logged in.
+## Part 1: R A I L S and Encoding BCrypt
+
+#### Creating our Server
+
+
+#### Enter: JWT
+
+---
+
+* Token-based authentication is **stateless**. _We are not storing any information about a logged in user on the server_ (which also means we don't need a model or table for our user sessions). No stored information means your application can scale and add more machines as necessary without worrying about where a user is logged in. Instead, the client (browser) stores a token and sends that token along with every request. Instead of storing a plaintext username, or user_id, we can encrypt user data with JSON Web Tokens (JWT) and store that encrypted token client side.
 
 ---
 
 ### JWT Auth Flow:
 
-![](https://cdn2.auth0.com/docs/media/articles/api-auth/client-credentials-grant.png)
+![](https://i.stack.imgur.com/f2ZhM.png)
 
 * Here is the JWT authentication flow for logging in:
   1. An already existing user requests access with their username and password
@@ -37,10 +46,10 @@
 
 ### Encoding and Decoding JWTs
 
-* Add `gem 'jwt'` to your [Gemfile](/45-redux-auth/server/Gemfile)
-* After calling `bundle install` we can see some of the functionality by opening a `rails console`
+* Add [`gem 'jwt'`](https://github.com/jwt/ruby-jwt) to your [Gemfile](/45-redux-auth/server/Gemfile)
+* After calling `bundle install` we can explore some JWT methods by opening a `rails console`
   * `JWT.encode` takes up to three arguments: a payload to encode, an application secret of the user's choice, and an optional third that can be used to specify the hashing algorithm used. Typically, we don't need to show the third. This returns a JWT as a string.
-  * `JWT.decode` takes three arguments as well: a JWT as a string, an applicatin secret, and optionally a hashing algorithm.
+  * `JWT.decode` takes three arguments as well: a JWT as a string, an application secret, and optionally a hashing algorithm.
 
 ```ruby
 #in rails console
@@ -56,7 +65,11 @@
 => {"beef"=>"steak"}
 ```
 
-* Building this functionality into our [`ApplicationController`](/45-redux-auth/server/app/controllers/application_controller.rb). Given that many different controllers will need to authenticate and authorize users––[`AuthController`](/45-redux-auth/server/app/controllers/api/v1/auth_controller.rb), [`UsersController`](/45-redux-auth/server/app/controllers/api/v1/users_controller.rb), etc––it makes sense to lift the functionality of encoding/decoding tokens to our top level [`ApplicationController`](/45-redux-auth/server/app/controllers/application_controller.rb). Recall that **all** controllers inherit from `ApplicationController`
+---
+
+### Building this functionality into our [`ApplicationController`](/45-redux-auth/server/app/controllers/application_controller.rb)
+
+* Given that many different controllers will need to authenticate and authorize users––[`AuthController`](/45-redux-auth/server/app/controllers/api/v1/auth_controller.rb), [`UsersController`](/45-redux-auth/server/app/controllers/api/v1/users_controller.rb), etc––it makes sense to lift the functionality of encoding/decoding tokens to our top level [`ApplicationController`](/45-redux-auth/server/app/controllers/application_controller.rb). Recall that **all** controllers inherit from `ApplicationController`
 
 ```ruby
 class ApplicationController < ActionController::API
@@ -70,11 +83,201 @@ class ApplicationController < ActionController::API
     # token => "eyJhbGciOiJIUzI1NiJ9.eyJiZWVmIjoic3RlYWsifQ._IBTHTLGX35ZJWTCcY30tLmwU9arwdpNVxtVU0NpAuI"
 
     JWT.decode(token, "supersecretcode")[0]
-    # JWT.decode => [{"beef"=>"steak"}, {"alg"=>"HS256"}]
-    # [0] gives us the payload
+    # JWT.decode => [{ "beef"=>"steak" }, { "alg"=>"HS256" }]
+    # [0] gives us the payload { "beef"=>"steak" }
   end
 end
 ```
+
+---
+* [According to the JWT Documentation](https://jwt.io/introduction/):
+  Whenever the user wants to access a protected route or resource, the user agent (browser in our case) should send the JWT, typically in the Authorization header using the Bearer schema. The content of the header should look like the following:
+
+  `Authorization: Bearer <token>`
+
+---
+
+* The corresponding `fetch` request might look like this:
+
+```javascript
+fetch('http://localhost:3000/api/v1/profile', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'Application/json',
+    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+  }
+})
+```
+
+---
+
+* Knowing this, we can setup our server to anticipate a JWT sent along in request headers:
+
+```ruby
+class ApplicationController < ActionController::API
+  def encode_token(payload)
+    # payload => { beef: 'steak' }
+    JWT.encode(payload, 'my_s3cr3t')
+    # jwt string: "eyJhbGciOiJIUzI1NiJ9.eyJiZWVmIjoic3RlYWsifQ._IBTHTLGX35ZJWTCcY30tLmwU9arwdpNVxtVU0NpAuI"
+  end
+
+  def auth_header
+    # { 'Authorization': 'Bearer <token>' }
+    request.headers['Authorization']
+  end
+
+  def decoded_token
+    if auth_header
+      token = auth_header.split(' ')[1]
+      # headers: { 'Authorization': 'Bearer <token>' }
+      begin
+        JWT.decode(token, 'my_s3cr3t', true, algorithm: 'HS256')
+        # JWT.decode => [{ "beef"=>"steak" }, { "alg"=>"HS256" }]
+      rescue JWT::DecodeError
+        nil
+      end
+    end
+  end
+```
+
+---
+* A few things to note about the code above:
+  * The [`Begin/Rescue` syntax](https://ruby-doc.org/core-2.2.0/doc/syntax/exceptions_rdoc.html) allows us to **rescue** out of an exception in Ruby. Let's see an example in a `rails console`. In the event our server receives and attempts to decode an **invalid token**:
+
+```ruby
+# in rails console
+> invalid_token = "nnnnnnnooooooootttttt.aaaaaaaaaaaavvvvvvaaaallliiiiidddddd.jjjjjjjwwwwwttttttt"
+
+> JWT.decode(invalid_token, 'my_s3cr3t', true, algorithm: 'HS256')
+
+Traceback (most recent call last):
+        1: from (irb):6
+JWT::DecodeError (Invalid segment encoding)
+```
+
+* In other words, if our server receives a bad token, this will raise an exception causing a [500 Internal Server Error](http://httpstatusrappers.com/500.html). We can account for this by **rescuing out of this exception**:
+
+```ruby
+# in rails console
+> invalid_token = "nnnnnnnooooooootttttt.aaaaaaaaaaaavvvvvvaaaallliiiiidddddd.jjjjjjjwwwwwttttttt"
+
+> begin JWT.decode(invalid_token, 'my_s3cr3t', true, algorithm: 'HS256')
+  rescue JWT::DecodeError
+    nil
+>  end
+ => nil
+```
+
+* Instead of crashing our server, we simply return `nil` and keep trucking along.
+
+---
+
+* We can then complete our controller by automatically obtaining the user whenever an authorization header is present:
+
+```ruby
+class ApplicationController < ActionController::API
+
+  def encode_token(payload)
+    JWT.encode(payload, 'my_s3cr3t')
+  end
+
+  def auth_header
+    request.headers['Authorization']
+  end
+
+  def decoded_token
+    if auth_header
+      token = auth_header.split(' ')[1]
+      begin
+        JWT.decode(token, 'my_s3cr3t', true, algorithm: 'HS256')
+      rescue JWT::DecodeError
+        nil
+      end
+    end
+  end
+
+  def current_user
+    if decoded_token
+      # decoded_token=> [{"user_id"=>2}, {"alg"=>"HS256"}]
+      # or nil if we can't decode the token
+      user_id = decoded_token[0]['user_id']
+      @user = User.find_by(id: user_id)
+    end
+  end
+
+  def logged_in?
+    !!current_user
+  end
+end
+```
+
+* Recall that a Ruby object/instance is 'truthy' so `!!user_instance #=> true` and nil is 'falsey': `!!nil #=> false`
+
+---
+
+* Finally, let's lock down our application to prevent unauthorized access:
+
+```ruby
+class ApplicationController < ActionController::API
+  before_action :authorized
+
+  def encode_token(payload)
+    # should store secret in env variable
+    JWT.encode(payload, 'my_s3cr3t')
+  end
+
+  def auth_header
+    # Authorization: 'Bearer MYTOKEN'
+    request.headers['Authorization']
+  end
+
+  def decoded_token
+    if auth_header
+      token = auth_header.split(' ')[1] # header: {'Authorization': 'Bearer JWTTOKEN'}
+      begin
+        JWT.decode(token, 'my_s3cr3t', true, algorithm: 'HS256')
+      rescue JWT::DecodeError
+        nil
+      end
+    end
+  end
+
+  def current_user
+    if decoded_token
+      user_id = decoded_token[0]['user_id']
+      @user = User.find_by(id: user_id)
+    end
+  end
+
+  def logged_in?
+    !!current_user
+  end
+
+  def authorized
+    render json: { message: 'Please log in' }, status: 401 unless logged_in?
+  end
+end
+
+```
+
+* A few things to note about the code above:
+  * `before_action :authorized` will call the authorized method **before anything else happens in our app**. This will effectively lock down the entire application. Next we'll build our `UsersController` and `AuthController` to allow signup/login.
+
+---
+
+
+
+   It also means we need to add the following to our [`AuthController`](/45-redux-auth/server/app/controllers/api/v1/auth_controller.rb):
+
+```ruby
+class Api::V1::AuthController < ApplicationController
+  skip_before_action :authorized, only: [:create]
+end
+```
+  * It wouldn't make sense to ask our users to be logged in before they log in. This circular logic will make it impossible for users to authenticate into the app.
+  * `User.find_by({ name: 'Chandler Bing' })` will either return `nil` or a ruby instance. Ruby instances are truthy in Ruby, `nil` is falsey. Therefore, `!!user_instance #=>true` and `!!nil #=>false`
+
+---
 
 ### Integrating JWT into Auth Flow
 
@@ -140,112 +343,11 @@ end
 
   * If `user` is `nil`, then `!!nil` will evaluate to `false` and **ruby will not even attempt to call .authenticate on user**. Without this catch, we will get a `NoMethodError (undefined method 'authenticate' for nil:NilClass)`.
 
-
----
-* [According to the JWT Documentation](https://jwt.io/introduction/):
-  Whenever the user wants to access a protected route or resource, the user agent should send the JWT, typically in the Authorization header using the Bearer schema. The content of the header should look like the following:
-
-  `Authorization: Bearer <token>`
-
-* Knowing this, we can ensure our server is anticipating a token sent along in a header.
-
----
-
-* The corresponding `fetch` request might look like this:
-
-```javascript
-fetch('http://localhost:3000/api/v1/profile', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'Application/json',
-    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-  }
-})
-```
-
----
-
-```ruby
-def encode_token(payload)
-  # should store secret in env variable
-  JWT.encode(payload, 'my_s3cr3t')
-end
-
-def auth_header
-  # headers: { Authorization: 'Bearer <token>' }
-  request.headers['Authorization']
-end
-
-def decoded_token
-  if auth_header
-    token = auth_header.split(' ')[1]
-    # header: { 'Authorization': 'Bearer <token>' }
-    begin
-      JWT.decode(token, 'my_s3cr3t', true, algorithm: 'HS256')
-    rescue JWT::DecodeError
-      # instead of crashing and throwing a 500 error, rescue
-      # recall that JWT decode returns an array of hashes, so make sure we return data of that same shape
-      [{}]
-    end
-  end
-end
-```
-
-* We can then complete our pipeline by automatically obtaining the user whenever an authorization header is present:
-
-```ruby
-class ApplicationController < ActionController::API
-  before_action :authorized
-
-  def encode_token(payload)
-    JWT.encode(payload, 'my_s3cr3t')
-  end
-
-  def auth_header
-    request.headers['Authorization']
-  end
-
-  def decoded_token
-    if auth_header
-      token = auth_header.split(' ')[1]
-      begin
-        JWT.decode(token, 'my_s3cr3t', true, algorithm: 'HS256')
-      rescue JWT::DecodeError
-        [{}]
-      end
-    end
-  end
-
-  def current_user
-    if decoded_token
-      # decoded_token=> [{"user_id"=>2}, {"alg"=>"HS256"}]
-      user_id = decoded_token[0]['user_id']
-      @user = User.find_by(id: user_id)
-    end
-  end
-
-  def logged_in?
-    !!current_user
-  end
-
-  def authorized
-    render json: { message: 'Please log in' }, status: 401 unless logged_in?
-  end
-end
-```
-* A few things to note about the code above:
-  * `before_action :authorized` will call the authorized method **before anything else happens in our app**. This effectively lock down the entire application. It also means we need to add the following to our `AuthController`:
-
-```ruby
-class Api::V1::AuthController < ApplicationController
-  skip_before_action :authorized, only: [:create]
-end
-```
-  * It wouldn't make sense to ask our users to be logged in before they log in. This circular logic will make it impossible for users to authenticate into the app.
-  * `User.find_by({ name: 'Chandler Bing' })` will either return `nil` or a ruby instance. Ruby instances are truthy in Ruby, `nil` is falsey. Therefore, `!!user_instance #=>true` and `!!nil #=>false`
-
 ---
 
 ### External Resources
 - [JWT Documentation](https://jwt.io/introduction/)
+- [JWT Ruby Gem on GitHub](https://github.com/jwt/ruby-jwt)
 - [Figaro Gem for hiding secrets in your app](https://github.com/laserlemon/figaro#getting-started)
+- [Ruby Begin Rescue Documentation](https://ruby-doc.org/core-2.2.0/doc/syntax/exceptions_rdoc.html)
+- [HTTP Status Rappers](http://httpstatusrappers.com)
