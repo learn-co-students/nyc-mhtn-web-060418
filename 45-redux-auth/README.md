@@ -336,8 +336,8 @@ true && not_a_variable
   * Let's take another look at our previous example:
 
 ```ruby
-user = User.find_by(username: params[:username])
-if !!user && user.authenticate(params[:password])
+@user = User.find_by(username: params[:username])
+if @user && @user.authenticate(params[:password])
 end
 ```
 
