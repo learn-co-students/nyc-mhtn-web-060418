@@ -348,6 +348,8 @@ JWT::DecodeError (Invalid segment encoding)
 
 - Instead of crashing our server, we simply return `nil` and keep trucking along.
 
+![keep trucking](https://media.giphy.com/media/3xb5V0fbxHXck/giphy.gif)
+
 ---
 
 - We can then complete our controller by automatically obtaining the user whenever an authorization header is present:
