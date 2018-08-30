@@ -558,6 +558,8 @@ end
 - [rack-cors gem](https://github.com/cyu/rack-cors)
 - [MDN article on CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
 - [Bcrypt gem](https://github.com/codahale/bcrypt-ruby)
+- [ActiveModelSerializers gem](https://github.com/rails-api/active_model_serializers)
+- [SitePoint Article on ActiveModelSerializers in Rails](https://www.sitepoint.com/active-model-serializers-rails-and-json-oh-my/)
 - [Postman App for making HTTP requests](https://www.getpostman.com/apps)
 - [JWT Documentation](https://jwt.io/introduction/)
 - [JWT Ruby Gem on GitHub](https://github.com/jwt/ruby-jwt)
