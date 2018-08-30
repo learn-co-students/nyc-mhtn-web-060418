@@ -106,7 +106,26 @@ end
 class User < ApplicationRecord
   has_secure_password
 end
+```
 
+* Let's add a create method to our [`UsersController`][users_controller]:
+
+```ruby
+class Api::V1::UsersController < ApplicationController
+  def create
+    @user = User.create(user_params)
+    if @user.valid?
+      render json: { user: @user }, status: :created
+    else
+      render json: { error: 'failed to create user' }, status: :not_acceptable
+    end
+  end
+
+  private
+  def user_params
+    params.require(:user).permit(:username, :password, :bio, :avatar)
+  end
+end
 ```
 
 ---
@@ -124,6 +143,32 @@ Rails.application.routes.draw do
   end
 end
 ```
+
+---
+
+* Take some time to test this either in [Postman](https://www.getpostman.com/apps) or with JavaScript fetch:
+
+```javascript
+fetch('http://localhost:3000/api/v1/users', {
+	method: 'POST',
+	headers: {
+		'Content-Type': 'application/json',
+		'Accept': 'application/json'
+	},
+	body: JSON.stringify({
+		user: {
+      username: 'guy',
+      password: 'hi',
+      bio: 'King of Flavortown, USA',
+      avatar: 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Guy_Fieri_at_Guantanamo_2.jpg'
+    }
+	})
+}).then(r => r.json()).then(console.log)
+```
+
+---
+
+# Make Sure You Can POST and Create a New User Before Proceeding
 
 ---
 
@@ -472,6 +517,7 @@ end
 - [rack-cors gem](https://github.com/cyu/rack-cors)
 - [MDN article on CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
 - [Bcrypt gem](https://github.com/codahale/bcrypt-ruby)
+- [Postman App for making HTTP requests](https://www.getpostman.com/apps)
 - [JWT Documentation](https://jwt.io/introduction/)
 - [JWT Ruby Gem on GitHub](https://github.com/jwt/ruby-jwt)
 - [Figaro Gem for hiding secrets in your app](https://github.com/laserlemon/figaro#getting-started)
