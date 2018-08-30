@@ -174,7 +174,7 @@ fetch('http://localhost:3000/api/v1/users', {
 
 ---
 
-#### Enter: JWT
+## Enter: JWT
 
 ---
 
@@ -428,22 +428,45 @@ end
 ```
 
 * A few things to note about the code above:
-  * `before_action :authorized` will call the authorized method **before anything else happens in our app**. This will effectively lock down the entire application. Next we'll build our [`UsersController`][users_controller] and [`AuthController`][auth_controller] to allow signup/login.
+  * `before_action :authorized` will call the authorized method **before anything else happens in our app**. This will effectively lock down the entire application. Next we'll augment our [`UsersController`][users_controller] and build our [`AuthController`][auth_controller] to allow signup/login.
 
 ---
 
-#### Building out User Login and Signup
-
----
-
-   It also means we need to add the following to our [`AuthController`][auth_controller]:
+#### Updating the [UsersController][users_controller]
 
 ```ruby
-class Api::V1::AuthController < ApplicationController
+class Api::V1::UsersController < ApplicationController
+  skip_before_action :authorized, only: [:create]
+
+  def profile
+    current_user ? (render json: UserSerializer.new(current_user), status: 200) : (render json: { message: 'User not found' }, status: 404)
+  end
+
+  def create
+    @user = User.create(user_params)
+    if @user.valid?
+      render json: { user: @user }, status: :created
+    else
+      render json: { error: 'failed to create user' }, status: :not_acceptable
+    end
+  end
+
+  private
+
+  def user_params
+    params.require(:user).permit(:username, :password, :bio, :avatar)
+  end
+end
+
+```
+* We need to make sure to skip the `before_action :authorized` coming from [ApplicationController][application_controller]
+
+```ruby
+class Api::V1::UsersController < ApplicationController
   skip_before_action :authorized, only: [:create]
 end
 ```
-  * It wouldn't make sense to ask our users to be logged in before they log in. This circular logic will make it impossible for users to authenticate into the app.
+  * It wouldn't make sense to ask our users to be logged in before they create an account. This circular logic will make it impossible for users to authenticate into the app.
   * `User.find_by({ name: 'Chandler Bing' })` will either return `nil` or a ruby instance. Ruby instances are truthy in Ruby, `nil` is falsey. Therefore, `!!user_instance #=>true` and `!!nil #=>false`
 
 ---
