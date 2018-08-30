@@ -101,9 +101,8 @@ end
 
 ```javascript
 fetch('http://localhost:3000/api/v1/profile', {
-  method: 'POST',
+  method: 'GET',
   headers: {
-    'Content-Type': 'Application/json',
     'Authorization': `Bearer ${localStorage.getItem('jwt')}`
   }
 })
