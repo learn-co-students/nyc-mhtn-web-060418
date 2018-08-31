@@ -10,7 +10,7 @@
 
 - This section will walk through building a rails server. If you have questions about `Cors`, `ActiveModel::Serializer`, `Postgres`, namespacing and versioning our API, and/or general questions about Rails as an api only, refer [to this guide](https://github.com/learn-co-curriculum/mod3-project-week-setup-example).
 
-- Let's create our app with `rails new server --api --database=postgresql`
+- Let's create our app with `rails new backend_project_name --api --database=postgresql`
 
 - We're going to need a few gems in our [Gemfile][gemfile] so let's go ahead and add them: `bundle add jwt && bundle add active_model_serializers && bundle add faker`––if you get a gem not found error, try running gem install on each of these, or manually add them to your [Gemfile][gemfile].
 
@@ -73,7 +73,8 @@ gem "active_model_serializers", "~> 0.10.7"
 gem "faker", "~> 1.9"
 ```
 
-- Don't forget to enable [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) in your app. Uncomment the following in [`config/initializers/cors.rb`](/45-redux-auth/server/config/initializers/cors.rb). Don't forget to change the origins from `example.com` to `*`:
+- Don't forget to enable [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) in your app. Uncomment the following in [`config/initializers/cors.rb`](/45-redux-auth/server/config/initializers/cors.rb). Don't forget to change the origins from `example.com` to `*`
+- Depending on the use-case and needs of our API, we might want to limit access to our app. For example, if our React frontend is deployed to `myDankReactApp.com`, we'd want to only allow requests from that domain to our server. If certain endpoints are meant to be public, we can make those available but limit to `GET` requests only, for example.
 
 ```ruby
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
@@ -106,6 +107,15 @@ end
 ```ruby
 class User < ApplicationRecord
   has_secure_password
+end
+```
+
+- You might also want to add some [validations](https://guides.rubyonrails.org/active_record_validations.html) to your users:
+
+```ruby
+class User < ApplicationRecord
+  has_secure_password
+  validates :username, uniqueness: { case_sensitive: false }
 end
 ```
 
@@ -475,13 +485,13 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def logged_in
+  def logged_in?
     !!current_user
   end
 end
 ```
 
-- Recall that a Ruby object/instance is 'truthy': `!!user_instance #=> true` and nil is 'falsey': `!!nil #=> false`. Therefore `logged_in` will just return a boolean depending on what our `current_user` method returns.
+- Recall that a Ruby object/instance is 'truthy': `!!user_instance #=> true` and nil is 'falsey': `!!nil #=> false`. Therefore `logged_in?` will just return a boolean depending on what our `current_user` method returns.
 
 ---
 
@@ -520,12 +530,12 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def logged_in
+  def logged_in?
     !!current_user
   end
 
   def authorized
-    render json: { message: 'Please log in' }, status: :unauthorized unless logged_in
+    render json: { message: 'Please log in' }, status: :unauthorized unless logged_in?
   end
 end
 ```
@@ -664,11 +674,9 @@ class Api::V1::UsersController < ApplicationController
   skip_before_action :authorized, only: %i[create]
 
   def profile
-    # logged_in and current_user are defined in application_controller
-    if logged_in
+    # authorized before_action in ApplicationController will return before we get to this method if the user is not authorized
+    def profile
       render json: { user: UserSerializer.new(current_user) }, status: :accepted
-    else
-      render json: { message: 'User not found' }, status: :not_found
     end
   end
 
@@ -710,10 +718,12 @@ end
 - [ActiveModel has_secure_password docs](https://api.rubyonrails.org/classes/ActiveModel/SecurePassword/ClassMethods.html#method-i-has_secure_password)
 - [Mozilla Blog Post on Storing Passwords in a Database](https://blog.mozilla.org/webdev/2012/06/08/lets-talk-about-password-storage/)
 - [ActiveModelSerializers gem](https://github.com/rails-api/active_model_serializers)
+- [ActiveRecord Validations Documentation](https://guides.rubyonrails.org/active_record_validations.html)
 - [SitePoint Article on ActiveModelSerializers in Rails](https://www.sitepoint.com/active-model-serializers-rails-and-json-oh-my/)
 - [Postman App for making HTTP requests](https://www.getpostman.com/apps)
 - [JWT Documentation](https://jwt.io/introduction/)
 - [JWT Ruby Gem on GitHub](https://github.com/jwt/ruby-jwt)
+- [JWT in Depth](https://blog.angular-university.io/angular-jwt/)
 - [Authentication](https://en.wikipedia.org/wiki/Authentication)
 - [Authorization](https://en.wikipedia.org/wiki/Authorization)
 - [Authentication vs Authorization](https://stackoverflow.com/questions/6556522/authentication-versus-authorization)
