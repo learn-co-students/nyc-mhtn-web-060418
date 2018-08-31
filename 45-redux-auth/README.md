@@ -598,6 +598,12 @@ end
 
 ---
 
+## That's It For the Server! Part 1 is Done!
+
+![i am done gif](https://media.giphy.com/media/lS74OiH1JYYak/giphy.gif)
+
+---
+
 ### External Resources
 
 - [Mod3 API Setup Guide](https://github.com/learn-co-curriculum/mod3-project-week-setup-example)
