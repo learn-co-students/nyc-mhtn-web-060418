@@ -51,12 +51,12 @@ class LoginForm extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  authenticatingUser: state.usersReducer.authenticatingUser,
-  failedLogin: state.usersReducer.failedLogin,
-  loginError: state.usersReducer.error,
-  user: state.usersReducer.username,
-  loggedIn: state.usersReducer.loggedIn
+const mapStateToProps = ({ usersReducer: { authenticatingUser, failedLogin, loginError, error, user, loggedIn } }) => ({
+  authenticatingUser,
+  failedLogin,
+  loginError,
+  user,
+  loggedIn
 })
 
 export default withRouter(
