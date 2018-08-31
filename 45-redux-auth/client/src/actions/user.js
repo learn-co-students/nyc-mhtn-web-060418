@@ -19,7 +19,7 @@ export const loginUser = (username, password) => {
 }
 
 export const fetchCurrentUser = () => {
-  // fetch current user takes the token in localStorage and finds out who it belongs to
+  // takes the token in localStorage and finds out who it belongs to
   return dispatch => {
     fetch('http://localhost:3000/api/v1/profile', {
       method: 'GET',
