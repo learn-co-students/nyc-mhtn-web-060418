@@ -231,6 +231,8 @@ class Api::V1::UsersController < ApplicationController
 end
 ```
 
+- We can use the [built in Rails HTTP status code symbols](https://gist.github.com/mlanett/a31c340b132ddefa9cca) when sending responses to the client `status: :not_acceptable`, for instance. Forgot what status codes are? Check out [httpstatusrappers.com/](http://httpstatusrappers.com/)
+
 - And update our [`UserSerializer`][user_serializer]:
 
 ```ruby
