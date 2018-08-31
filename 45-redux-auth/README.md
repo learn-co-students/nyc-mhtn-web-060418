@@ -660,7 +660,11 @@ end
 
 ---
 
-- Again, the client should be sending a JWT along with every authenticated request. A sample request might look like:
+- Again, the client should be sending a JWT along with every authenticated request. Refer to this diagram from [scotch.io](https://scotch.io/tutorials/the-ins-and-outs-of-token-based-authentication):
+
+![scotch.io article on token auth](https://cdn.scotch.io/scotchy-uploads/2014/11/tokens-new.png)
+
+- A sample request might look like:
 
 ```javascript
 fetch('http://localhost:3000/api/v1/profile', {
@@ -731,6 +735,7 @@ end
 - [JWT Documentation](https://jwt.io/introduction/)
 - [JWT Ruby Gem on GitHub](https://github.com/jwt/ruby-jwt)
 - [JWT in Depth](https://blog.angular-university.io/angular-jwt/)
+- [Scotch.io: The Ins and Outs of Token Based Authentication](https://scotch.io/tutorials/the-ins-and-outs-of-token-based-authentication)
 - [Authentication](https://en.wikipedia.org/wiki/Authentication)
 - [Authorization](https://en.wikipedia.org/wiki/Authorization)
 - [Authentication vs Authorization](https://stackoverflow.com/questions/6556522/authentication-versus-authorization)
