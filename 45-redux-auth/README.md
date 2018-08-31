@@ -4,7 +4,7 @@
 
 ---
 
-## Part 1: R A I L S and Encoding BCrypt
+## Part 1: R A I L S BCrypt, JWT
 
 #### Creating our Server
 
