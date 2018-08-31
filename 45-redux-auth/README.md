@@ -370,7 +370,7 @@ end
 fetch('http://localhost:3000/api/v1/profile', {
   method: 'GET',
   headers: {
-    Authorization: `Bearer ${localStorage.getItem('jwt')}`
+    Authorization: `Bearer <token>`
   }
 })
 ```
@@ -610,7 +610,7 @@ class Api::V1::AuthController < ApplicationController
 end
 ```
 
-- We can simply call our [`ApplicationController#issue_token`][application_controller] method, passing the found user's ID in a payload. The newly created JWT can then be passed back along with the user's data. **The user data can be stored in our application's state**, e.g., [React](https://reactjs.org/) or [Redux](https://redux.js.org/), while the token can be stored in `localStorage`.
+- We can simply call our [`ApplicationController#issue_token`][application_controller] method, passing the found user's ID in a payload. The newly created JWT can then be passed back along with the user's data. **The user data can be stored in our application's state**, e.g., [React](https://reactjs.org/) or [Redux](https://redux.js.org/), while the token can be stored client-side.
 
 - A few things to keep in mind about the code above:
   - `User.find_by({ name: 'Chandler Bing' })` will either return a user instance if that user can be found **OR** it will return `nil` if that user is not found.
@@ -652,7 +652,7 @@ end
 fetch('http://localhost:3000/api/v1/profile', {
   method: 'GET',
   headers: {
-    Authorization: `Bearer ${localStorage.getItem('jwt')}`
+    Authorization: `Bearer <token>`
   }
 })
 ```
