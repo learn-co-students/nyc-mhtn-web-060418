@@ -172,7 +172,7 @@ end
   => true
 ```
 
-![mind blown](https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif)
+![mind blown](https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif)
 
 - We have no way of storing instances of `BCrypt::Password` in our database. Instead, we're storing users' password digests **[as strings][schema]**. If we were to build our own `User#authenticate` method using `BCrypt`, it might look something like this:
 
