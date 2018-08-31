@@ -2,6 +2,8 @@
 
 **This is a sample application and walks through _one_ possible auth implementation. It does not cover everything there is to know about auth and is intended as an introduction. Please do not blindly copy/paste the code here. Use this as a guide for setting up auth in a React/Redux application using JSON Web Tokens.**
 
+- Another disclaimer is that there are tradeoffs to every auth implementation. To secure our application further, we should set our tokens to expire and make sure our app is being served over [HTTPS](https://en.wikipedia.org/wiki/HTTPS). Furthermore, there are some [tradeoffs to storing JWTs in browser `localStorage`](https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage).
+
 ---
 
 ## RAILS BCrypt, JWT 🔐
@@ -710,6 +712,8 @@ end
 
 ### External Resources
 
+- [HTTPS Wikipedia Article](https://en.wikipedia.org/wiki/HTTPS)
+- [Storing JWTs in Cookies vs HTML5 localStorage](https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage)
 - [Mod3 API Setup Guide](https://github.com/learn-co-curriculum/mod3-project-week-setup-example)
 - [rack-cors gem](https://github.com/cyu/rack-cors)
 - [MDN article on CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
