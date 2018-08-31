@@ -1,4 +1,4 @@
-### JWT Auth in Redux and Rails
+# JWT Auth in Redux and Rails
 
 **This is a sample application and walks through _one_ possible auth implementation. It does not cover everything there is to know about auth and is intended as an introduction. Please do not blindly copy/paste the code here. Use this as a guide for setting up auth in a React/Redux application using JSON Web Tokens.**
 
