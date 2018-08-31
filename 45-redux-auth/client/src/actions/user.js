@@ -10,7 +10,7 @@ export const loginUser = (username, password) => {
       body: JSON.stringify({ user: { username, password } })
     })
       .then(response => response.json())
-      // {user: {}, jwt: 'lksjkljdlkjslkdfj'}
+      // {user: {}, jwt: 'aaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccc'}
       .then(({ user, jwt }) => {
         localStorage.setItem('jwt', jwt)
         dispatch(setCurrentUser(user))
@@ -37,4 +37,5 @@ export const setCurrentUser = userData => ({
   payload: userData
 })
 
+// tell our app we're currently fetching
 export const authenticatingUser = () => ({ type: 'AUTHENTICATING_USER' })
