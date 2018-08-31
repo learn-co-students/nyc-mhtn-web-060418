@@ -28,9 +28,6 @@ const withAuth = WrappedComponent => {
   )(AuthorizedComponent)
 }
 
-const mapStateToProps = state => ({
-  loggedIn: state.usersReducer.loggedIn,
-  authenticatingUser: state.usersReducer.authenticatingUser
-})
+const mapStateToProps = ({ usersReducer: { loggedIn, authenticatingUser } }) => ({ loggedIn, authenticatingUser })
 
 export default withAuth
