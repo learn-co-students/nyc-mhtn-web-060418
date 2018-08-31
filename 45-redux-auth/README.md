@@ -385,13 +385,13 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def logged_in?
+  def logged_in
     !!current_user
   end
 end
 ```
 
-- Recall that a Ruby object/instance is 'truthy' so `!!user_instance #=> true` and nil is 'falsey': `!!nil #=> false`. Therefore `logged_in?` will just return a boolean depending on what our `current_user` method returns.
+- Recall that a Ruby object/instance is 'truthy' so `!!user_instance #=> true` and nil is 'falsey': `!!nil #=> false`. Therefore `logged_in` will just return a boolean depending on what our `current_user` method returns.
 
 ---
 
@@ -430,12 +430,12 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def logged_in?
+  def logged_in
     !!current_user
   end
 
   def authorized
-    render json: { message: 'Please log in' }, status: :unauthorized unless logged_in?
+    render json: { message: 'Please log in' }, status: :unauthorized unless logged_in
   end
 end
 ```
@@ -549,6 +549,52 @@ end
 ```
 
 - If `user` is `nil`, then `!!nil` will evaluate to `false` and **ruby will not even attempt to call .authenticate on user**. Without this catch, we will get a `NoMethodError (undefined method 'authenticate' for nil:NilClass)`.
+
+---
+
+- Again, the client should be sending a JWT along with every authenticated request. A sample request might look like:
+
+```javascript
+fetch('http://localhost:3000/api/v1/profile', {
+  method: 'GET',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('jwt')}`
+  }
+})
+```
+
+- So, let's update our [`UsersController`][users_controller] so that an authenticated user can access their profile information:
+
+```ruby
+class Api::V1::UsersController < ApplicationController
+  skip_before_action :authorized, only: %i[create]
+
+  def profile
+    # logged_in is defined in application_controller
+    if logged_in
+      render json: { user: UserSerializer.new(current_user) }, status: :accepted
+    else
+      render json: { message: 'User not found' }, status: :not_found
+    end
+  end
+
+  def create
+    @user = User.create(user_params)
+    if @user.valid?
+      @token = encode_token(user_id: @user.id)
+      render json: { user: UserSerializer.new(@user), jwt: @token }, status: :created
+    else
+      render json: { error: 'failed to create user' }, status: :not_acceptable
+    end
+  end
+
+  private
+
+  def user_params
+    params.require(:user).permit(:username, :password, :bio, :avatar)
+  end
+end
+```
 
 ---
 

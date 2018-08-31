@@ -2,7 +2,7 @@ class Api::V1::UsersController < ApplicationController
   skip_before_action :authorized, only: %i[create]
 
   def profile
-    current_user ? (render json: UserSerializer.new(current_user), status: :accepted) : (render json: { message: 'User not found' }, status: :not_found)
+    logged_in ? (render json: { user: UserSerializer.new(current_user) }, status: :accepted) : (render json: { message: 'User not found' }, status: :not_found)
   end
 
   def create
