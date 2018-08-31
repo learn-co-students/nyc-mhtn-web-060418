@@ -101,13 +101,104 @@ end
   - `rails g serializer user` (if you want to [use a serializer](https://www.sitepoint.com/active-model-serializers-rails-and-json-oh-my/))
   - `rails db:migrate`
 
-- Add `has_secure_password` to [`app/models/user.rb`](/45-redux-auth/server/app/models/user.rb). Recall that `has_secure_password` comes from [bcrypt](https://github.com/codahale/bcrypt-ruby):
+- Add `has_secure_password` to [`app/models/user.rb`](/45-redux-auth/server/app/models/user.rb). Recall that `has_secure_password` comes from [ActiveModel and adds methods to set and authenticate against a BCrypt password](https://api.rubyonrails.org/classes/ActiveModel/SecurePassword/ClassMethods.html#method-i-has_secure_password):
 
 ```ruby
 class User < ApplicationRecord
   has_secure_password
 end
 ```
+
+---
+#### Quick BCrypt Tangent
+
+* Recall that `BCrypt` allows us to [salt and hash](https://en.wikipedia.org/wiki/Bcrypt) users' plaintext passwords. We then store these passwords that have been 'digested' by `BCrypt` in our database. **[Never ever ever store a users' plaintext password in your database](https://blog.mozilla.org/webdev/2012/06/08/lets-talk-about-password-storage/). It's bad form.**
+
+* Let's take a look at some of the functionality provided by `BCrypt`:
+
+```ruby
+# in rails console
+> BCrypt::Password.create('P@ssw0rd')
+ => "$2a$10$D0iXNNy/5r2YC5GC4ArGB.dNL6IpUzxH3WjCewb3FM8ciwsHBt0cq"
+```
+
+* Remember how `BCrypt::Password` [inherits from the Ruby `String` class](https://github.com/codahale/bcrypt-ruby/blob/master/lib/bcrypt/password.rb#L23) and has its own [== instance method](https://github.com/codahale/bcrypt-ruby/blob/master/lib/bcrypt/password.rb#L65) that allows us to compare a plaintext password to an already salted and hashed one:
+
+```ruby
+# in rails console
+> salted_pw = BCrypt::Password.create('P@ssw0rd')
+  => "$2a$10$YQvJPemUzm8IdCCaHxiOOes6HMEHda/.Hl60cUoYb4X4fncgT8ubG"
+
+> salted_pw.class
+  => BCrypt::Password
+
+> salted_pw == 'P@ssw0rd'
+  => true
+```
+
+* `BCrypt` also provides a method that will take a stringified `password_digest` and turn it into an instance of `BCrypt::Password`, allowing us to call the over-written `==` method.
+
+```ruby
+# in rails console
+> sample_digest = User.last.password_digest
+  => "$2a$10$SJiIJnmQJ/A4z4fFG5EuE.aOoCjacFuQMVpVzQnhPSJKYLFCoqmWy"
+
+> sample_digest.class
+  => String
+
+> sample_digest == 'P@ssword'
+ => false
+
+> bcrypt_sample_digest = BCrypt::Password.new(sample_digest)
+  => "$2a$10$dw4sYcbLXc8XRX6YGc7ve.ot6LbYevMbSpFQZUaa8tm5NI8cxBPwa"
+
+> bcrypt_sample_digest.class
+  => BCrypt::Password
+
+> bcrypt_sample_digest == 'P@ssw0rd'
+  => true
+```
+
+![mind blown](https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif)
+
+* This is great because we are storing user password digests as strings in our database. If we were to build out our own `User#authenticate` method using `BCrypt`, it might look like this:
+
+```ruby
+class User < ApplicationRecord
+  attr_accessor :password
+
+  def authenticate(plaintext_password)
+    if BCrypt::Password.new(self.password_digest) == plaintext_password
+      self
+    else
+      false
+    end
+  end
+end
+```
+
+```ruby
+# in rails console
+> User.last.authenticate('not my password')
+  => false
+
+> User.last.authenticate('P@ssw0rd')
+  => #<User id: 21, username: "Guy", password_digest: "$2a$10$dw4sYcbLXc8XRX6YGc7ve.ot6LbYevMbSpFQZUaa8tm...", avatar: nil, created_at: "2018-08-31 02:11:15", updated_at: "2018-08-31 02:11:15", bio: "I love flavortown, USA">
+```
+
+* Instead of attempting to 'roll our own authenticate', we can instead rely on [`ActiveModel#has_secure_password`](https://api.rubyonrails.org/classes/ActiveModel/SecurePassword/ClassMethods.html#method-i-has_secure_password) to add the `User#authenticate` method for us:
+
+```ruby
+class User < ApplicationRecord
+  has_secure_password
+end
+
+```
+
+![salt bae](https://media.giphy.com/media/l4Jz3a8jO92crUlWM/giphy.gif)
+
+#### End of BCrypt Tangent
+---
 
 - Let's add a create method to our [`UsersController`][users_controller]:
 
@@ -610,6 +701,9 @@ end
 - [rack-cors gem](https://github.com/cyu/rack-cors)
 - [MDN article on CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
 - [Bcrypt gem](https://github.com/codahale/bcrypt-ruby)
+- [Bcrypt::Password source code](https://github.com/codahale/bcrypt-ruby/blob/master/lib/bcrypt/password.rb#L23)
+- [ActiveModel has_secure_password docs](https://api.rubyonrails.org/classes/ActiveModel/SecurePassword/ClassMethods.html#method-i-has_secure_password)
+- [Mozilla Blog Post on Storing Passwords in a Database](https://blog.mozilla.org/webdev/2012/06/08/lets-talk-about-password-storage/)
 - [ActiveModelSerializers gem](https://github.com/rails-api/active_model_serializers)
 - [SitePoint Article on ActiveModelSerializers in Rails](https://www.sitepoint.com/active-model-serializers-rails-and-json-oh-my/)
 - [Postman App for making HTTP requests](https://www.getpostman.com/apps)
