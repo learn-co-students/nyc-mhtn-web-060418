@@ -159,7 +159,7 @@ end
   => true
 ```
 
-![mind blown](https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif)
+![mind blown](https://i.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.webp)
 
 * This is great because we are storing user password digests as strings in our database. If we were to build out our own `User#authenticate` method using `BCrypt`, it might look like this:
 
