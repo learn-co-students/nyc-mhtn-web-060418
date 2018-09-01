@@ -2,7 +2,7 @@
 
 **This is a sample application and walks through _one_ possible auth implementation. It does not cover everything there is to know about auth and is intended as an introduction. Please do not blindly copy/paste the code here. Use this as a guide for setting up auth in a React/Redux application using JSON Web Tokens.**
 
-- Another disclaimer is that there are tradeoffs to every auth implementation. To secure our application further, we should set our tokens to expire and make sure our app is being served over [HTTPS](https://en.wikipedia.org/wiki/HTTPS). Furthermore, there are some [tradeoffs to storing JWTs in browser `localStorage`](https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage). [This StackOverflow post has a concise summary of the benefits/tradeoffs about where/how to store tokens client-side](https://stackoverflow.com/questions/35291573/csrf-protection-with-json-web-tokens/35347022#35347022).
+- Second disclaimer: there are tradeoffs to every auth implementation. To secure our application further, we should set our tokens to expire and make sure our app is being served over [HTTPS](https://en.wikipedia.org/wiki/HTTPS). Furthermore, there are some [tradeoffs to storing JWTs in browser `localStorage`](https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage). [This StackOverflow post has a concise summary of the benefits/tradeoffs about where/how to store tokens client-side](https://stackoverflow.com/questions/35291573/csrf-protection-with-json-web-tokens/35347022#35347022).
 
 ---
 
@@ -76,7 +76,7 @@ gem "faker", "~> 1.9"
 ```
 
 - Don't forget to enable [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) in your app. Uncomment the following in [`config/initializers/cors.rb`](/45-redux-auth/server/config/initializers/cors.rb). Don't forget to change the origins from `example.com` to `*`
-- Depending on the use-case and needs of our API, we might want to limit access to our app. For example, if our React frontend is deployed to `myDankReactApp.com`, we'd want to only allow requests from that domain to our server. If certain endpoints are meant to be public, we can make those available but limit to `GET` requests only, for example.
+- Depending on the use-case and needs of our API, we might want to limit access to our app. For example, if our React frontend is deployed to `myDankReactApp.com`, we might want to limit access to that domain only. If certain endpoints are meant to be public, we can make those available but limit to `GET` requests, for example.
 
 ```ruby
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
@@ -104,7 +104,7 @@ end
   - `rails g serializer user` (if you want to [use a serializer](https://www.sitepoint.com/active-model-serializers-rails-and-json-oh-my/))
   - `rails db:migrate`
 
-- Add `has_secure_password` to [`app/models/user.rb`](/45-redux-auth/server/app/models/user.rb). Recall that `has_secure_password` comes from [ActiveModel and adds methods to set and authenticate against a BCrypt password](https://api.rubyonrails.org/classes/ActiveModel/SecurePassword/ClassMethods.html#method-i-has_secure_password):
+- Add `has_secure_password` to [`app/models/user.rb`](/45-redux-auth/server/app/models/user.rb). Recall that `has_secure_password` comes from [`ActiveModel` and adds methods to set and authenticate against a BCrypt password](https://api.rubyonrails.org/classes/ActiveModel/SecurePassword/ClassMethods.html#method-i-has_secure_password):
 
 ```ruby
 class User < ApplicationRecord
@@ -213,7 +213,7 @@ end
 
 ---
 
-- Let's add a create method to our [`UsersController`][users_controller]:
+- Let's add a `create` method to our [`UsersController`][users_controller]:
 
 ```ruby
 class Api::V1::UsersController < ApplicationController
@@ -233,7 +233,7 @@ class Api::V1::UsersController < ApplicationController
 end
 ```
 
-- We can use the [built in Rails HTTP status code symbols](https://gist.github.com/mlanett/a31c340b132ddefa9cca) when sending responses to the client `status: :not_acceptable`, for instance. Forgot what status codes are? Check out [httpstatusrappers.com/](http://httpstatusrappers.com/)
+- We can use the [built in Rails HTTP status code symbols](https://gist.github.com/mlanett/a31c340b132ddefa9cca) when sending responses to the client; `status: :not_acceptable`, for instance. Need a refresher on [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)? Check out [httpstatusrappers.com/](http://httpstatusrappers.com/)
 
 - And update our [`UserSerializer`][user_serializer]:
 
@@ -595,7 +595,7 @@ end
 
 #### Implementing Login
 
-- A token should be issued in two different controller actions: [`UsersController#create`][users_controller] and [`AuthController#create`][auth_controller]. Think about what these methods are reponsible for––**a user signing up for our app for the first time** and **an already existing user logging back in** respectively. In both cases, our server needs to issue a new token🥇.
+- A token should be issued in two different controller actions: [`UsersController#create`][users_controller] and [`AuthController#create`][auth_controller]. Think about what these methods are reponsible for––**a user signing up for our app for the first time** and **an already existing user logging back in**. In both cases, our server needs to issue a new token🥇.
 
 - We'll need to create a new controller to handle login: `rails g controller api/v1/auth` and let's add the following to this newly created [AuthController][auth_controller]:
 
@@ -630,7 +630,7 @@ end
   - `User.find_by({ name: 'Chandler Bing' })` will either return a user instance if that user can be found **OR** it will return `nil` if that user is not found.
   - In the event that the user is not found, `user = User.find_by(username: params[:username])` will evaluate to `nil`.
   - Can we call `.authenticate` on `nil`? NO!! `NoMethodError (undefined method 'authenticate' for nil:NilClass)`
-  - Ruby, however is **lazy**. If Ruby encounters `&&`, both statements in the expression must evaluate to true. If the statement on the left side evaluates to false, Ruby will **not even look at the statement on the right**. Let's see an example:
+  - Ruby, however, is **lazy**. If Ruby encounters `&&`, both statements in the expression must evaluate to true. If the statement on the left side evaluates to false, Ruby will **not even look at the statement on the right**. Let's see an example:
 
 ```ruby
 # in irb or a rails console
@@ -682,10 +682,7 @@ class Api::V1::UsersController < ApplicationController
   skip_before_action :authorized, only: %i[create]
 
   def profile
-    # authorized before_action in ApplicationController will return before we get to this method if the user is not authorized
-    def profile
-      render json: { user: UserSerializer.new(current_user) }, status: :accepted
-    end
+    render json: { user: UserSerializer.new(current_user) }, status: :accepted
   end
 
   def create
@@ -704,6 +701,12 @@ class Api::V1::UsersController < ApplicationController
     params.require(:user).permit(:username, :password, :bio, :avatar)
   end
 end
+```
+
+- One final note about the snippet above: [`ApplicationController`][application_controller] calls `authorized` **before any other controller methods are called**. If authorization fails, our server will never call [`UsersController#profile`][users_controller] and will instead:
+
+```ruby
+render json: { message: 'Please log in' }, status: :unauthorized
 ```
 
 ---
@@ -742,6 +745,7 @@ end
 - [Figaro Gem for hiding secrets in your app](https://github.com/laserlemon/figaro#getting-started)
 - [Ruby Begin Rescue Documentation](https://ruby-doc.org/core-2.2.0/doc/syntax/exceptions_rdoc.html)
 - [HTTP Status Rappers](http://httpstatusrappers.com)
+- [MDN Article on HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 - [Rails Status Code Symbols Cheat Sheet](https://gist.github.com/mlanett/a31c340b132ddefa9cca)
 - [React Documentation](https://reactjs.org/)
 - [Redux Documentation](https://redux.js.org/)
