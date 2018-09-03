@@ -125,7 +125,7 @@ end
 
 #### Quick BCrypt Tangent
 
-- Recall that `BCrypt` allows us to [salt](<https://en.wikipedia.org/wiki/Salt_(cryptography)>) users' plaintext passwords before running them through a [hashing function](https://en.wikipedia.org/wiki/Cryptographic_hash_function). We then store these passwords that have been 'digested' by `BCrypt` in our database. **[Never ever ever store a users' plaintext password in your database](https://blog.mozilla.org/webdev/2012/06/08/lets-talk-about-password-storage/). It's bad form and should be avoided at all costs.**
+- Recall that `BCrypt` allows us to [salt](<https://en.wikipedia.org/wiki/Salt_(cryptography)>) users' plaintext passwords before running them through a [hashing function](https://en.wikipedia.org/wiki/Cryptographic_hash_function). We then store these passwords that have been 'digested' by `BCrypt` in our database. **[Never ever ever store your users' plaintext passwords in your database](https://blog.mozilla.org/webdev/2012/06/08/lets-talk-about-password-storage/). It's bad form and should be avoided at all costs.**
 
 - Let's take a look at some of the functionality provided by `BCrypt`:
 
@@ -391,7 +391,7 @@ fetch('http://localhost:3000/api/v1/profile', {
 
 ---
 
-- Knowing this, we can setup our server to anticipate a JWT sent along in request headers:
+- Knowing this, we can set up our server to anticipate a JWT sent along in request headers:
 
 ```ruby
 class ApplicationController < ActionController::API
@@ -595,7 +595,7 @@ end
 
 #### Implementing Login
 
-- A token should be issued in two different controller actions: [`UsersController#create`][users_controller] and [`AuthController#create`][auth_controller]. Think about what these methods are reponsible for––**a user signing up for our app for the first time** and **an already existing user logging back in**. In both cases, our server needs to issue a new token🥇.
+- A token should be issued in two different controller actions: [`UsersController#create`][users_controller] and [`AuthController#create`][auth_controller]. Think about what these methods are responsible for––**a user signing up for our app for the first time** and **an already existing user logging back in**. In both cases, our server needs to issue a new token🥇.
 
 - We'll need to create a new controller to handle login: `rails g controller api/v1/auth` and let's add the following to this newly created [AuthController][auth_controller]:
 
