@@ -353,13 +353,13 @@ fetch('http://localhost:3000/api/v1/users', {
 
 ```ruby
 class ApplicationController < ActionController::API
-  def issue_token(payload)
+  def encode_token(payload)
     # payload => { beef: 'steak' }
     JWT.encode(payload, 'my_s3cr3t')
     # jwt string: "eyJhbGciOiJIUzI1NiJ9.eyJiZWVmIjoic3RlYWsifQ._IBTHTLGX35ZJWTCcY30tLmwU9arwdpNVxtVU0NpAuI"
   end
 
-  def decode_token(token)
+  def decoded_token(token)
     # token => "eyJhbGciOiJIUzI1NiJ9.eyJiZWVmIjoic3RlYWsifQ._IBTHTLGX35ZJWTCcY30tLmwU9arwdpNVxtVU0NpAuI"
 
     JWT.decode(token, 'my_s3cr3t')[0]
@@ -624,7 +624,7 @@ class Api::V1::AuthController < ApplicationController
 end
 ```
 
-- We can simply call our [`ApplicationController#issue_token`][application_controller] method, passing the found user's ID in a payload. The newly created JWT can then be passed back along with the user's data. **The user data can be stored in our application's state**, e.g., [React](https://reactjs.org/) or [Redux](https://redux.js.org/), while the token can be stored client-side.
+- We can simply call our [`ApplicationController#encode_token`][application_controller] method, passing the found user's ID in a payload. The newly created JWT can then be passed back along with the user's data. **The user data can be stored in our application's state**, e.g., [React](https://reactjs.org/) or [Redux](https://redux.js.org/), while the token can be stored client-side.
 
 - A few things to keep in mind about the code above:
   - `User.find_by({ name: 'Chandler Bing' })` will either return a user instance if that user can be found **OR** it will return `nil` if that user is not found.

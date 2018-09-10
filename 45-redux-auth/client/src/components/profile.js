@@ -3,6 +3,12 @@ import { connect } from 'react-redux'
 import { Card, Image } from 'semantic-ui-react'
 import withAuth from '../hocs/withAuth'
 
+/* props: {
+  avatar: 'someURL',
+  username: 'chandler Bing',
+  bio: 'i like eggs'
+} */
+
 const Profile = ({ avatar, username, bio }) => (
   <Card>
     <Image src={avatar} />

@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { withRouter, Redirect } from 'react-router'
 import { loginUser } from '../actions/user'
 import { Button, Form, Segment, Message } from 'semantic-ui-react'
@@ -26,7 +27,7 @@ class LoginForm extends React.Component {
           loading={this.props.authenticatingUser}
           error={this.props.failedLogin}
         >
-          <Message error header={this.props.failedLogin ? this.props.loginError.message : null} />
+          <Message error header={this.props.failedLogin ? this.props.error : null} />
           <Form.Group widths="equal">
             <Form.Input
               label="username"
@@ -51,17 +52,20 @@ class LoginForm extends React.Component {
   }
 }
 
-const mapStateToProps = ({ usersReducer: { authenticatingUser, failedLogin, loginError, error, user, loggedIn } }) => ({
+const mapStateToProps = ({ usersReducer: { authenticatingUser, failedLogin, error, user, loggedIn } }) => ({
   authenticatingUser,
   failedLogin,
-  loginError,
+  error,
   user,
   loggedIn
 })
 
+const mapDispatchToProps = (dispatch) => ({ loginUser: bindActionCreators(loginUser, dispatch) })
+
 export default withRouter(
   connect(
     mapStateToProps,
-    { loginUser }
+    mapDispatchToProps
+    // { loginUser }
   )(LoginForm)
 )
